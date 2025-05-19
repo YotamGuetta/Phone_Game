@@ -15,12 +15,25 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float attackRange = 2;
     [SerializeField] private float attackCooldown = 2;
+
+    private bool enemyIsAttacking() {
+        return currEnemyState == EnemyState.Attacking || currEnemyState == EnemyState.AttackingUp || currEnemyState == EnemyState.AttackingDown;
+    }
+    private void makeEnemyFacePlayer() 
+    {
+        if (player.position.x > transform.position.x && facingDirection == -1 ||
+                player.position.x < transform.position.x && facingDirection == 1)
+        {
+            flip();
+        }
+    }
     private void Start()
     {
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         changeState(EnemyState.Idle);
+        
     }
     private void OnEnable()
     {
@@ -51,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 chase();
             }
-            else if (currEnemyState == EnemyState.Attacking)
+            else if (enemyIsAttacking())
             {
                 rb.linearVelocity = Vector2.zero;
 
@@ -62,11 +75,7 @@ public class EnemyMovement : MonoBehaviour
     private void chase()
     {
 
-        if (player.position.x > transform.position.x && facingDirection == -1 ||
-             player.position.x < transform.position.x && facingDirection == 1)
-        {
-            flip();
-        }
+        makeEnemyFacePlayer();
 
         Vector2 direction = (player.position - transform.position).normalized;
         rb.linearVelocity = direction * speed;
@@ -74,17 +83,34 @@ public class EnemyMovement : MonoBehaviour
     private void checkForPlayer()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(detectionPoint.position, playerDetectionRange, playerLayer);
+
+        //If player detected by the enemy
         if (hits.Length > 0)
         {
             player = hits[0].transform;
 
-            //if player is in attack range and attack cooldown is ready => attack player
+            //If the enemy is in attacking distance and can attack
             if (Vector2.Distance(transform.position, player.transform.position) <= attackRange && attackCooldownTimer <= 0)
             {
                 attackCooldownTimer = attackCooldown;
-                changeState(EnemyState.Attacking);
+
+                //If the enemy is mostly horizontal to the player
+                if (Mathf.Abs(transform.position.x - player.transform.position.x) >= attackRange / 2)
+                {
+                    makeEnemyFacePlayer();
+                    changeState(EnemyState.Attacking);
+                }
+                //If the player is below the enemy
+                else if (transform.position.y > player.transform.position.y)
+                {
+                    changeState(EnemyState.AttackingDown);
+                }
+                else 
+                {
+                    changeState(EnemyState.AttackingUp);
+                }
             }
-            else if (Vector2.Distance(transform.position, player.transform.position) > attackRange && currEnemyState != EnemyState.Attacking)
+            else if (Vector2.Distance(transform.position, player.transform.position) > attackRange && !enemyIsAttacking())
             {
                 changeState(EnemyState.Chasing);
             }
@@ -109,6 +135,12 @@ public class EnemyMovement : MonoBehaviour
             case EnemyState.Attacking:
                 anim.SetBool("isAttacking", false);
                 break;
+            case EnemyState.AttackingUp:
+                anim.SetBool("isAttackingUp", false);
+                break;
+            case EnemyState.AttackingDown:
+                anim.SetBool("isAttackingDown", false);
+                break;
             default:
                  anim.SetBool("isIdle", false);
                 break;
@@ -121,6 +153,12 @@ public class EnemyMovement : MonoBehaviour
                 break;
             case EnemyState.Attacking:
                 anim.SetBool("isAttacking", true);
+                break;
+            case EnemyState.AttackingUp:
+                anim.SetBool("isAttackingUp", true);
+                break;
+            case EnemyState.AttackingDown:
+                anim.SetBool("isAttackingDown", true);
                 break;
             default:
                 anim.SetBool("isIdle", true);
@@ -139,5 +177,7 @@ public enum EnemyState
     Idle,
     Chasing,
     Attacking,
+    AttackingUp,
+    AttackingDown,
     Knockedback
 }

@@ -3,13 +3,15 @@ using UnityEngine;
 public class EnemyCombat : MonoBehaviour
 {
     [SerializeField] private int damage = 1;
-    [SerializeField] private Transform attackPoint;
+    [SerializeField] private Transform attackPointUp;
+    [SerializeField] private Transform attackPointForward;
+    [SerializeField] private Transform attackPointDown;
     [SerializeField] private float weaponRange;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private float knockbackForce;
     [SerializeField] private float knockbackStunTime;
 
-    
+    private Transform attackPoint;
     /*
     // On Collision with enemy damage
     private void OnCollisionEnter2D(Collision2D collision)
@@ -20,6 +22,10 @@ public class EnemyCombat : MonoBehaviour
         }
     }
     */
+    private void Awake()
+    {
+        attackPoint = attackPointForward;
+    }
     private void OnEnable()
     {
         EnemyStats.OnDamageChanged += setDamage;
@@ -56,7 +62,22 @@ public class EnemyCombat : MonoBehaviour
         knockbackStunTime = newVal;
     }
 
-    public void Attack() 
+    public void AttackUp() {
+        attackPoint = attackPointUp;
+        Attack();
+    }
+    public void AttackForward()
+    {
+        attackPoint = attackPointForward;
+        Attack();
+    }
+    public void AttackDown()
+    {
+        attackPoint = attackPointDown;
+        Attack();
+    }
+
+    private void Attack() 
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, weaponRange, playerLayer);
 
@@ -71,7 +92,6 @@ public class EnemyCombat : MonoBehaviour
                     break;
                 }
             }
-            //hits[0].GetComponent<HealthPointsTracker>().CurrentHealth -= damage;
         
         }
     }
