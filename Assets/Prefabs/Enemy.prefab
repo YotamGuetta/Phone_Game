@@ -166,6 +166,7 @@ MonoBehaviour:
   currentHealth: 8
   healthText: {fileID: 0}
   healthTextAnim: {fileID: 0}
+  expWorth: 8
 --- !u!114 &7647974289966442330
 MonoBehaviour:
   m_ObjectHideFlags: 0

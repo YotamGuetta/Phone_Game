@@ -4,11 +4,14 @@ using TMPro;
 
 public class HealthPointsTracker : MonoBehaviour
 {
+    public delegate void EnemyDefeated(int exp);
+    public static event EnemyDefeated OnEnemyDefeated;
+
     [SerializeField] private int maxHealth;
     [SerializeField] private int currentHealth;
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private Animator healthTextAnim;
-    
+    [SerializeField] private int expWorth;
 
     private bool showHealthInSlider = false;
     private Slider slider;
@@ -88,6 +91,9 @@ public class HealthPointsTracker : MonoBehaviour
                 canvasGroup.alpha = 0;
             }
             showHealthInSlider = false;
+
+            OnEnemyDefeated(expWorth);
+
             Destroy(gameObject);
         }
     }
