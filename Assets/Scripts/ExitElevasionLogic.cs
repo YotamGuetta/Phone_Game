@@ -10,16 +10,18 @@ public class ExitElevasionLogic : MonoBehaviour
         {
             foreach (Collider2D mountain in mountainColliders)
             {
-                mountain.enabled = true;
+                NewEmptyCSharpScript.ignoreAllColliders(collision, mountain,false);
+
+                //mountain.enabled = true;
             }
 
             foreach (Collider2D boundary in boundaryColliders)
             {
-                boundary.enabled = false;
+                NewEmptyCSharpScript.ignoreAllColliders(collision, boundary, true);
+                //boundary.enabled = false;
             }
             //collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
             collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 5;
         }
-
     }
 }

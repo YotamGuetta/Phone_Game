@@ -16,6 +16,26 @@ public class HealthPointsTracker : MonoBehaviour
     private bool showHealthInSlider = false;
     private Slider slider;
     private CanvasGroup canvasGroup;
+    private void OnEnable()
+    {
+        if (gameObject.tag == "Player")
+        {
+            PlayerStatsManager.OnMaxHealthchanged += addMaxHealth;
+        }
+    }
+    private void OnDisable()
+    {
+        if (gameObject.tag == "Player")
+        {
+            PlayerStatsManager.OnMaxHealthchanged -= addMaxHealth;
+        }
+    }
+    private void addMaxHealth(int amount) 
+    {
+        maxHealth += amount;
+        currentHealth += amount;
+        updateHealthText();
+    }
     public int CurrentHealth
     {
         get
