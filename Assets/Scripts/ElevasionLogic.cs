@@ -7,13 +7,17 @@ public class ElevasionLogic : MonoBehaviour
     ///
     public Collider2D[] mountainColliders;
     public Collider2D[] boundaryColliders;
+
+    [SerializeField] private GameObject arrows;
     private void OnTriggerEnter2D(Collider2D collision) 
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
+            
             foreach (Collider2D mountain in mountainColliders)
             {
                 ignoreAllColliders(collision, mountain, true);
+                
                 //mountain.enabled = false;
             }
 
@@ -24,6 +28,14 @@ public class ElevasionLogic : MonoBehaviour
             }
             //collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
             collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 15;
+
+            //Arrows Elevasion
+            if (collision.gameObject.tag == "Player")
+            {
+                arrows.GetComponent<Collider2D>().excludeLayers |= LayerMask.GetMask("Obstacle");
+                arrows.GetComponentInChildren<SpriteRenderer>().sortingOrder = 15;
+            }
+            
         }
     
     }
@@ -39,6 +51,10 @@ public class ElevasionLogic : MonoBehaviour
             Physics2D.IgnoreCollision(collider, collider2, ignore);
 
         }
+    }
+    private void OnDestroy()
+    {
+        arrows.GetComponent<Collider2D>().excludeLayers &= ~(LayerMask.GetMask("Obstacle"));
     }
 }
 

@@ -5,20 +5,28 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public FixedJoystick joystick;
+    public Animator anim;
+
     private Vector2 lastDirectionMoved;
-    public Vector2 LastDirectionMoved { get { return lastDirectionMoved; } }
+    
     private float hInput, vInput;
     private Rigidbody2D rb;
-    public Animator anim;
+    
     private int facingDirection = 1;
     private bool isKnockedback;
     private PlayerInput playerInput;
+
+    private float currSpeed;
+    private bool isShooting = false;
+
+    public Vector2 LastDirectionMoved { get { return lastDirectionMoved; } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         lastDirectionMoved = Vector2.up;
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
+        currSpeed = PlayerStatsManager.Instance.movementSpeed;
     }
     private void Update()
     {
@@ -29,6 +37,18 @@ public class PlayerMovement : MonoBehaviour
     {
         playerJoystickMovement();
     }
+    public void SetIsPlayerAiming(bool IsShooting) 
+    {
+        if (IsShooting)
+        {
+            currSpeed = PlayerStatsManager.Instance.movementSpeed * PlayerStatsManager.Instance.aimingMovmentPenelty;
+        }
+        else
+        {
+            currSpeed = PlayerStatsManager.Instance.movementSpeed;
+        }
+        isShooting = IsShooting;
+    }
     private void playerJoystickMovement() {
 
         //Joystick inputs
@@ -38,12 +58,12 @@ public class PlayerMovement : MonoBehaviour
         //Other inputs
         hInput += Input.GetAxis("Horizontal");
         vInput += Input.GetAxis("Vertical");
-
+       
         if (!isKnockedback)
         {
             //flipe sprite if the player is walking the opposite direction he is faceing
-            if (hInput > 0 && transform.localScale.x < 0 ||
-            hInput < 0 && transform.localScale.x > 0)
+            if ((hInput > 0 && transform.localScale.x < 0 ||
+            hInput < 0 && transform.localScale.x > 0) && !isShooting)
             {
                 flipPlayerSprite();
             }
@@ -57,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             anim.SetFloat("Vertical", Math.Abs(vInput));
 
             //Move player
-            rb.linearVelocity = new Vector2(hInput, vInput) * PlayerStatsManager.Instance.movementSpeed;
+            rb.linearVelocity = new Vector2(hInput, vInput) * currSpeed;
 
             /*
             Vector3 moveDirection = new Vector3(hInput, vInput, 0).normalized * movementSpeed;

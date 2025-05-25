@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_Sprite: {fileID: -4346244404228752641, guid: 7398cc9f21af64c4b86f3281436652d4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -113,8 +113,8 @@ MonoBehaviour:
     m_Bits: 256
   buriedSprite: {fileID: -6662812116773042688, guid: 7398cc9f21af64c4b86f3281436652d4, type: 3}
   damage: 2
-  knockbackForce: 10
-  knockbackTime: 0.5
+  knockbackForce: 5
+  knockbackTime: 0.3
   stunTime: 1
 --- !u!50 &5827619914144725350
 Rigidbody2D:
@@ -159,7 +159,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

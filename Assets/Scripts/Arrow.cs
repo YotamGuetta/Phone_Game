@@ -18,6 +18,8 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float knockbackForce;
     [SerializeField] private float knockbackTime;
     [SerializeField] private float stunTime;
+
+    public static bool IgnoreObstacles = false;
     public Vector2 Direction { get { return direction; } set { direction = value; rotateArrow(); } }
     public GameObject EnemyHealthSlider { get; set; }
     private void Start()
@@ -50,7 +52,7 @@ public class Arrow : MonoBehaviour
             }
             AttachToTarget(collision.gameObject.transform);
         }
-        else if ((ObstacleLayer.value & (1 << collision.gameObject.layer)) > 0) 
+        else if (!IgnoreObstacles &&(ObstacleLayer.value & (1 << collision.gameObject.layer)) > 0) 
         {
             AttachToTarget(collision.gameObject.transform);
         }
@@ -64,4 +66,5 @@ public class Arrow : MonoBehaviour
 
         transform.SetParent(target);
     }
+
 }

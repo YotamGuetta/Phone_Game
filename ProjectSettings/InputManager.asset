@@ -505,7 +505,7 @@ InputManager:
     m_Name: ToggleStats
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: left
+    negativeButton: 
     positiveButton: c
     altNegativeButton: 
     altPositiveButton: 
@@ -571,6 +571,22 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: left
     positiveButton: v
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 5
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: SwitchPlayer
+    descriptiveName: 
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: 1
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000

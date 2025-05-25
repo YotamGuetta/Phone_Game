@@ -18,7 +18,7 @@ public class PlayerStatsManager : MonoBehaviour
 
     [Header("Movement Stats")]
     public float movementSpeed;
-
+    public float aimingMovmentPenelty = 0.3f;
 
     [Header("Health Stats")]
     public int maxHealth;

@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerCombat : MonoBehaviour
 {
-    private event Action AttackTrigger;
+    public event Action<eightDirection> AttackInADirection;
 
-    public event Action AttackUpTrigger;
-    public event Action AttackForwardTrigger;
-    public event Action AttackDownTrigger;
 
     [SerializeField] private Transform upAttackPoint;
     [SerializeField] private Transform forwardAttackPoint;
@@ -33,21 +30,7 @@ public class PlayerCombat : MonoBehaviour
             attackTimer -= Time.deltaTime;
         }
     }
-    private void activeAtttackAnimations(eightDirection attackDirection)
-    {
-        switch (attackDirection)
-        {
-            case eightDirection.up:
-                AttackTrigger = AttackUpTrigger;
-                break;
-            case eightDirection.down:
-                AttackTrigger = AttackDownTrigger;
-                break;
-            default:
-                AttackTrigger = AttackForwardTrigger;
-                break;
-        }
-    }
+
     //activate attack
     public void Attack(eightDirection attackDirection) 
     {
@@ -55,11 +38,10 @@ public class PlayerCombat : MonoBehaviour
         {
             //use the correct direction the player is attacking
             setActivaAttackPoint(attackDirection);
-            activeAtttackAnimations(attackDirection);
             setDirectionFacing(attackDirection);
 
             //start attack animation
-            AttackTrigger?.Invoke();
+            AttackInADirection?.Invoke(attackDirection);
 
             //start attack cooldown
             attackTimer = PlayerStatsManager.Instance.attackCooldown;
