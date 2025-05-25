@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewEmptyCSharpScript : MonoBehaviour
+public class ElevasionLogic : MonoBehaviour
 {
     /// Potential Problem: 
     /// unit outside the elevation area that didn't interact with it is blocked by the mountain boarder if another unit interacted with the elevation

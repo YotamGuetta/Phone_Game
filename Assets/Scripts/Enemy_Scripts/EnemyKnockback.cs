@@ -11,11 +11,11 @@ public class EnemyKnockback : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
     }
 
-    public void Knockback(Transform player, float knockbackForce, float knockbackDuration, float stunTime)
+    public void Knockback(Transform forceTransform, float knockbackForce, float knockbackDuration, float stunTime)
     {
         enemyMovement.changeState(EnemyState.Knockedback);
         StartCoroutine(stunTimer(knockbackDuration, stunTime));
-        Vector2 direction = (transform.position - player.position).normalized;
+        Vector2 direction = (transform.position - forceTransform.position).normalized;
         rb.linearVelocity = direction * knockbackForce;
     }
     IEnumerator stunTimer(float knockbackDuration, float stunTime) {
