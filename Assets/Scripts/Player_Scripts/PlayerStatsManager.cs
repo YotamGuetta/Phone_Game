@@ -3,10 +3,13 @@ using System;
 
 public class PlayerStatsManager : MonoBehaviour
 {
-    public delegate void MaxHealthchanged(int healthAmount);
-    public static event MaxHealthchanged OnMaxHealthchanged;
+    public delegate void Healthchanged(int healthAmount);
+    public static event Healthchanged OnMaxHealthchanged;
+    public static event Healthchanged OnCurrentHealthchanged;
 
     public static PlayerStatsManager Instance;
+
+    public UIStats uIStats;
 
     [Header("Combat Stats")]
     public float weaponRange = 0.7f;
@@ -48,5 +51,16 @@ public class PlayerStatsManager : MonoBehaviour
         maxHealth += healthAmount;
         currentHealth = healthAmount;
         OnMaxHealthchanged(healthAmount);
+    }
+    public void UpdateCurrentHealth(int healthAmount)
+    {
+        currentHealth += healthAmount;
+        currentHealth = Math.Min(currentHealth, maxHealth);
+        OnCurrentHealthchanged(healthAmount);
+    }
+    public void UpdateSpeed(int amount)
+    {
+        movementSpeed += amount;
+        uIStats.UpdateAllStats();
     }
 }

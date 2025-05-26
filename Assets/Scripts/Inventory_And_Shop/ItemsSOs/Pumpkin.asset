@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e145c86549f7a478a4fa9c560febe8, type: 3}
+  m_Name: Pumpkin
+  m_EditorClassIdentifier: 
+  itemName: Pumpkin
+  itemDescription: Lets put a smile on that face
+  itemIcon: {fileID: 8389134475083476877, guid: 89b5cd135b9d93e42bfbebceef0548ac, type: 3}
+  isGold: 0
+  currentHealth: 7
+  maxHealth: 0
+  speed: 0
+  damage: 0
+  duration: 0

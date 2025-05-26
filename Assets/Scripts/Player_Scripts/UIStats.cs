@@ -18,9 +18,9 @@ public class UIStats : MonoBehaviour
 
             // If alpha = 0: timscale = 0, alpha is 1 and viceversa
             Time.timeScale = canvasGroup.alpha;
+            canvasGroup.alpha = (canvasGroup.alpha - 1) * (-1);
             canvasGroup.blocksRaycasts = canvasGroup.alpha == 1;
             canvasGroup.interactable = canvasGroup.alpha == 1;
-            canvasGroup.alpha = (canvasGroup.alpha - 1) * (-1);
 
             UpdateAllStats();
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class HealthPointsTracker : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class HealthPointsTracker : MonoBehaviour
         if (gameObject.tag == "Player")
         {
             PlayerStatsManager.OnMaxHealthchanged += addMaxHealth;
+            PlayerStatsManager.OnCurrentHealthchanged += addCurrentHealth;
         }
     }
     private void OnDisable()
@@ -28,12 +30,19 @@ public class HealthPointsTracker : MonoBehaviour
         if (gameObject.tag == "Player")
         {
             PlayerStatsManager.OnMaxHealthchanged -= addMaxHealth;
+            PlayerStatsManager.OnCurrentHealthchanged -= addCurrentHealth;
         }
     }
     private void addMaxHealth(int amount) 
     {
         maxHealth += amount;
         currentHealth += amount;
+        updateHealthText();
+    }
+    private void addCurrentHealth(int amount)
+    {
+        currentHealth += amount;
+        currentHealth = Math.Min(currentHealth, maxHealth);
         updateHealthText();
     }
     public int CurrentHealth
