@@ -24,7 +24,7 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    public void TryBuyItem(ItemSO itemSO, int price)
+    public void TryBuyItem(ItemAbs_SO itemSO, int price)
     {
         if (itemSO != null && inventoryManager.Gold >= price) 
         {
@@ -36,36 +36,39 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private bool HasSpaceForItem(ItemSO itemSO) 
+    private bool HasSpaceForItem(ItemAbs_SO itemSO)
     {
         foreach (var slot in inventoryManager.itemSlots)
         {
-            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
+
+            if (slot.itemSO == itemSO && slot.itemSO.IsStackable() && slot.quantity < ((ConsumableSO)slot.itemSO).StackSize)
             {
                 return true;
             }
-            else if (slot.itemSO == null) 
+            else if (slot.itemSO == null)
             {
                 return true;
             }
         }
+
         return false;
     }
 
-    public void SellItem(ItemSO itemSO)
+    public bool SellItem(ItemAbs_SO itemSO)
     {
         if (itemSO == null) 
         {
-            return;
+            return false;
         }
         foreach (var slot in shopSlots)
         {
             if (slot.SlotItemSO == itemSO)
             {
-                inventoryManager.Gold += Mathf.RoundToInt(slot.price * itemSellMultiplier);
-                return;
+                inventoryManager.Gold += Mathf.RoundToInt(slot.Price * itemSellMultiplier);
+                return true;
             }
         }
+        return false;
     }
 }
 
@@ -73,6 +76,6 @@ public class ShopManager : MonoBehaviour
 [System.Serializable]
 public class ShopItems
 {
-    public ItemSO itemSO;
+    public ItemAbs_SO itemSO;
     public int price;
 }

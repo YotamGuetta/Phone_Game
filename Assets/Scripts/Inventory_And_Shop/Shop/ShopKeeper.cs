@@ -8,9 +8,9 @@ public class ShopKeeper : MonoBehaviour
 
     public static ShopKeeper currentShopkeeper;
 
-    public Animator anim;
-    public CanvasGroup shopCanvasGroup;
-    public ShopManager shopManager;
+    [SerializeField] private Animator anim;
+    [SerializeField] private CanvasGroup shopCanvasGroup;
+    [SerializeField] private ShopManager shopManager;
 
     [SerializeField] private List<ShopItems> shopItems;
     [SerializeField] private List<ShopItems> shopWeapons;

@@ -9,15 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0e145c86549f7a478a4fa9c560febe8, type: 3}
-  m_Name: Gold
+  m_Script: {fileID: 11500000, guid: 01395cdde540bae44ae58c9eb422d7b6, type: 3}
+  m_Name: I_SmallGold
   m_EditorClassIdentifier: 
   itemName: Gold
-  itemDescription: 
+  itemDescription: is Gold
   itemIcon: {fileID: -7942359355602504142, guid: a7e9d082a56df2a49bfc6b2b45ebc6b2, type: 3}
-  isGold: 1
-  currentHealth: 0
-  maxHealth: 0
-  speed: 0
-  damage: 0
-  duration: 0
+  stackSize:
+    StatType: 5
+    StatName: Gold
+    Stat: 3

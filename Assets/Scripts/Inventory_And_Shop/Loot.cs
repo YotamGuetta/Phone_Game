@@ -3,13 +3,13 @@ using System;
 
 public class Loot : MonoBehaviour
 {
-    [SerializeField] private ItemSO itemSO;
+    [SerializeField] private ItemAbs_SO itemSO;
     [SerializeField] private int quantity;
     [SerializeField] private SpriteRenderer sr;
     private Animator anim;
 
-    public bool canBePickedup = true;
-    public static event Action<ItemSO, int> OnItemLooted;
+    public bool CanBePickedup = true;
+    public static event Action<ItemAbs_SO, int> OnItemLooted;
 
     private void Start()
     {
@@ -23,11 +23,11 @@ public class Loot : MonoBehaviour
         }
         updateApparence();
     }
-    public void Initialize(ItemSO itemSO, int quantity) 
+    public void Initialize(ItemAbs_SO itemSO, int quantity) 
     {
         this.itemSO = itemSO;
         this.quantity = quantity;
-        canBePickedup = false;
+        CanBePickedup = false;
         updateApparence();
     }
 
@@ -38,7 +38,7 @@ public class Loot : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && canBePickedup) 
+        if (collision.CompareTag("Player") && CanBePickedup) 
         {
             anim.Play("LootPickup");
 
@@ -53,7 +53,7 @@ public class Loot : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            canBePickedup = true;
+            CanBePickedup = true;
         }
     }
 }

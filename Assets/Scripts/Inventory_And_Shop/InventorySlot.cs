@@ -6,11 +6,11 @@ using System;
 
 public class InventorySlot : MonoBehaviour, IPointerClickHandler
 {
-    public ItemSO itemSO;
+    public ItemAbs_SO itemSO;
     public int quantity;
 
-    public Image itemImage;
-    public TMP_Text quantityText;
+    [SerializeField] private Image itemImage;
+    [SerializeField] private TMP_Text quantityText;
 
     private InventoryManager inventoryManager;
     private static ShopManager activeShop;
@@ -41,9 +41,11 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler
             {
                 if (activeShop != null)
                 {
-                    activeShop.SellItem(itemSO);
-                    quantity--;
-                    UpdateUI();
+                    if (activeShop.SellItem(itemSO))
+                    {
+                        quantity--;
+                        UpdateUI();
+                    }
                 }
                 else 
                 { 

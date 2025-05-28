@@ -1,43 +1,59 @@
-using System;
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
 public class UseItem : MonoBehaviour
 {
     
-    public void ApplyItemEffects(ItemSO itemSO)
+    public void ApplyItemEffects(ItemAbs_SO itemSO)
     {
-        if (itemSO.currentHealth > 0) 
+        foreach (var stat in itemSO.GetItemStats())
         {
-            PlayerStatsManager.Instance.UpdateCurrentHealth(itemSO.currentHealth);
-        }
-        if (itemSO.maxHealth > 0) 
-        {
-            PlayerStatsManager.Instance.UpdateMaxHealth(itemSO.maxHealth);
-        }
-        if(itemSO.speed > 0) 
-        {
-            PlayerStatsManager.Instance.UpdateSpeed(itemSO.speed);
-        }
-        if (itemSO.duration > 0) 
-        {
-            StartCoroutine(EffectTimer(itemSO, itemSO.duration));
-        }
+            updateStats(stat, 1);
+            if (stat.GetStatType() == statType.Duration) 
+            {
+                if (stat.TryParseToFloat(out float duration)) 
+                {
+                    StartCoroutine(EffectTimer(itemSO, duration));
+                }
+            }
+        } 
+
     }
-    private IEnumerator EffectTimer(ItemSO itemSO, float duration) 
+    private IEnumerator EffectTimer(ItemAbs_SO itemSO, float duration) 
     {
         yield return new WaitForSeconds(duration);
-        if (itemSO.currentHealth > 0)
+        foreach (var stat in itemSO.GetItemStats())
         {
-            PlayerStatsManager.Instance.UpdateCurrentHealth(-itemSO.currentHealth);
-        }
-        if (itemSO.maxHealth > 0)
-        {
-            PlayerStatsManager.Instance.UpdateMaxHealth(-itemSO.maxHealth);
-        }
-        if (itemSO.speed > 0)
-        {
-            PlayerStatsManager.Instance.UpdateSpeed(-itemSO.speed);
+            updateStats(stat, -1);
         }
     }
+    private void updateStats(IStat item, int Multiplier)
+    {
+        int valueI;
+
+        
+        switch (item.GetStatType())
+        {
+
+            case statType.CurrentHelth:
+                item.TryParseToInt(out valueI);
+                PlayerStatsManager.Instance.UpdateCurrentHealth(valueI * Multiplier);
+                break;
+            case statType.MaxHealth:
+                item.TryParseToInt(out valueI);
+                PlayerStatsManager.Instance.UpdateMaxHealth(valueI * Multiplier);
+                break;
+            case statType.Speed:
+                item.TryParseToInt(out valueI);
+                PlayerStatsManager.Instance.UpdateSpeed(valueI * Multiplier);
+                break;
+            case statType.Attack:
+                item.TryParseToInt(out valueI);
+                PlayerStatsManager.Instance.UpdateDamage(valueI * Multiplier);
+                break;
+        }
+
+    }
 }
+

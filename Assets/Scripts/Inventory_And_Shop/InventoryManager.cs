@@ -8,9 +8,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int gold;
     [SerializeField] private TMP_Text goldText;
 
-    public GameObject lootPrefab;
-    public Transform player;
-    public UseItem useItem;
+    [SerializeField] private GameObject lootPrefab;
+    [SerializeField] private Transform player;
+    [SerializeField] private UseItem useItem;
 
     public int Gold
     {
@@ -32,46 +32,64 @@ public class InventoryManager : MonoBehaviour
     private void OnEnable()
     {
         Loot.OnItemLooted += AddItem;
+        goldText.text = gold.ToString();
     }
     private void OnDisable()
     {
         Loot.OnItemLooted -= AddItem;
     }
 
-    public void AddItem(ItemSO itemSO, int quantity)
+    //Adds Item to inventory
+    public void AddItem(ItemAbs_SO itemSO, int quantity)
     {
-        if (itemSO.isGold)
+        //Add gold to the inventory if the item is gold
+        if (itemSO.IsGold)
         {
             gold += quantity;
             goldText.text = gold.ToString();
             return;
         }
 
-        foreach (var slot in itemSlots)
+        //Search for an item in the inventory if its stackable
+        if (itemSO.IsStackable()) 
         {
-            if (slot.itemSO == itemSO && slot.quantity < itemSO.stackSize)
+            foreach (var slot in itemSlots)
             {
-                int availableSpace = itemSO.stackSize - slot.quantity;
-                int amountToAdd = Mathf.Min(availableSpace, quantity);
-
-                slot.quantity += amountToAdd;
-                quantity -= amountToAdd;
-
-                slot.UpdateUI();
-                if (quantity <= 0)
+                if (slot.itemSO == itemSO)
                 {
-                    return;
+                    if (slot.itemSO is ConsumableSO consumableItem && slot.quantity < consumableItem.StackSize)
+                    {
+                        int availableSpace = consumableItem.StackSize - slot.quantity;
+                        int amountToAdd = Mathf.Min(availableSpace, quantity);
+
+                        slot.quantity += amountToAdd;
+                        quantity -= amountToAdd;
+
+                        slot.UpdateUI();
+                        if (quantity <= 0)
+                        {
+                            return;
+                        }
+                    }
                 }
             }
+
         }
 
+        //Search for an empty slot to put the item
         foreach (var slot in itemSlots)
         {
             if (slot.itemSO == null)
             {
-                int amountToAdd = Mathf.Min(itemSO.stackSize, quantity);
+                int amountToAdd = 1;
+                if (itemSO.IsStackable()) 
+                {
+                    amountToAdd = Mathf.Min(((ConsumableSO)itemSO).StackSize, quantity);
+                    //quantity -= amountToAdd;
+                }
+                
                 slot.itemSO = itemSO;
-                slot.quantity = quantity;
+                slot.quantity = amountToAdd;
                 slot.UpdateUI();
                 return;
             }
@@ -93,7 +111,7 @@ public class InventoryManager : MonoBehaviour
         slot.UpdateUI();
     }
 
-    private void dropLoot(ItemSO itemSO, int quantity)
+    private void dropLoot(ItemAbs_SO itemSO, int quantity)
     {
         Loot loot = Instantiate(lootPrefab, player.position, Quaternion.identity).GetComponent<Loot>();
         loot.Initialize(itemSO, quantity);

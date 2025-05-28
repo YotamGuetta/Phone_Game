@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0e145c86549f7a478a4fa9c560febe8, type: 3}
-  m_Name: BoneSword
+  m_Script: {fileID: 11500000, guid: 4b06932f6b1b95b49b7fd5c99e672d25, type: 3}
+  m_Name: I_BoneSword
   m_EditorClassIdentifier: 
   itemName: Bone Sword
-  itemDescription: which bone will break first?
+  itemDescription: is Bone Sword
   itemIcon: {fileID: -6270953770400647376, guid: d96cf5c2c62a7f64687ae2b6a768a4c4, type: 3}
-  isGold: 0
-  stackSize: 1
-  currentHealth: 0
-  maxHealth: 0
-  speed: 0
-  damage: 2
-  duration: 0
+  integerStats:
+  - StatType: 2
+    Stat: 4
+  - StatType: 3
+    Stat: 0
+  - StatType: 0
+    Stat: 0

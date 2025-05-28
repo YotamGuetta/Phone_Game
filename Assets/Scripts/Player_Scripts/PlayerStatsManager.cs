@@ -63,4 +63,9 @@ public class PlayerStatsManager : MonoBehaviour
         movementSpeed += amount;
         uIStats.UpdateAllStats();
     }
+    public void UpdateDamage(int amount)
+    {
+        damage += amount;
+        uIStats.UpdateAllStats();
+    }
 }

@@ -372,7 +372,7 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+      objectReference: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     - target: {fileID: 7519286264643794759, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Name
       value: Mushroom
@@ -708,7 +708,7 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+      objectReference: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     - target: {fileID: 7519286264643794759, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Name
       value: Mushroom
@@ -1542,7 +1542,7 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+      objectReference: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     - target: {fileID: 7519286264643794759, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Name
       value: Mushroom
@@ -2463,15 +2463,15 @@ MonoBehaviour:
   shopCanvasGroup: {fileID: 986668965}
   shopManager: {fileID: 986668968}
   shopItems:
-  - itemSO: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+  - itemSO: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     price: 12
-  - itemSO: {fileID: 11400000, guid: 1d5c627608b1cac41bc151fd421651bf, type: 2}
+  - itemSO: {fileID: 11400000, guid: 52ce9e2822597be4b9b3d3ed013a94c2, type: 2}
     price: 15
   shopWeapons:
-  - itemSO: {fileID: 11400000, guid: f884a7a6a74bc2e4fa21af6e63f6da1b, type: 2}
+  - itemSO: {fileID: 11400000, guid: ab8848ba423277e489178828864ef8e9, type: 2}
     price: 14
   shopArmors:
-  - itemSO: {fileID: 11400000, guid: d37250b3456a9594280598c3f8bf6382, type: 2}
+  - itemSO: {fileID: 11400000, guid: 1ad9f3e0fddba4d4aa014b8645f55f9d, type: 2}
     price: 10
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}
@@ -2864,7 +2864,11 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+      objectReference: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
+    - target: {fileID: 7268077887459556329, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8793915729297761979, guid: 63978ad18887b614eaa49ea19790a690, type: 3}
     - target: {fileID: 7519286264643794759, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Name
       value: Mushroom
@@ -5756,15 +5760,15 @@ MonoBehaviour:
   shopCanvasGroup: {fileID: 986668965}
   shopManager: {fileID: 986668968}
   shopItems:
-  - itemSO: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+  - itemSO: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     price: 2
-  - itemSO: {fileID: 11400000, guid: 1d5c627608b1cac41bc151fd421651bf, type: 2}
+  - itemSO: {fileID: 11400000, guid: 52ce9e2822597be4b9b3d3ed013a94c2, type: 2}
     price: 5
   shopWeapons:
-  - itemSO: {fileID: 11400000, guid: f884a7a6a74bc2e4fa21af6e63f6da1b, type: 2}
+  - itemSO: {fileID: 11400000, guid: ab8848ba423277e489178828864ef8e9, type: 2}
     price: 4
   shopArmors:
-  - itemSO: {fileID: 11400000, guid: d37250b3456a9594280598c3f8bf6382, type: 2}
+  - itemSO: {fileID: 11400000, guid: 1ad9f3e0fddba4d4aa014b8645f55f9d, type: 2}
     price: 9
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}
@@ -6148,14 +6152,14 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 1f3448ec87b77d6468e0bd0483e5b353, type: 2}
+      objectReference: {fileID: 11400000, guid: a24fa0a9ed6dceb4c830909cc7756555, type: 2}
     - target: {fileID: 7268077887459556329, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 5558420398955925738, guid: 3e1fcbe6502c2c04286e73f0d5ce5f34, type: 3}
     - target: {fileID: 7519286264643794759, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Name
-      value: Meat
+      value: Steak
       objectReference: {fileID: 0}
     - target: {fileID: 9055018980756844152, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7498,7 +7502,7 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 1d5c627608b1cac41bc151fd421651bf, type: 2}
+      objectReference: {fileID: 11400000, guid: 52ce9e2822597be4b9b3d3ed013a94c2, type: 2}
     - target: {fileID: 7268077887459556329, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -11511,7 +11515,7 @@ PrefabInstance:
     - target: {fileID: 5180291034874043408, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: itemSO
       value: 
-      objectReference: {fileID: 11400000, guid: 05720dba5ec4e384ebd36bb03209985a, type: 2}
+      objectReference: {fileID: 11400000, guid: ff2359298f434c04faadbc231e4fc925, type: 2}
     - target: {fileID: 7268077887459556329, guid: 5f7841f830816bf468bc8b86bc2993f6, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -27595,15 +27599,15 @@ MonoBehaviour:
   shopCanvasGroup: {fileID: 986668965}
   shopManager: {fileID: 986668968}
   shopItems:
-  - itemSO: {fileID: 11400000, guid: 83869677261c6684fae7e27674be2a67, type: 2}
+  - itemSO: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
     price: 12
-  - itemSO: {fileID: 11400000, guid: 1d5c627608b1cac41bc151fd421651bf, type: 2}
+  - itemSO: {fileID: 11400000, guid: 52ce9e2822597be4b9b3d3ed013a94c2, type: 2}
     price: 15
   shopWeapons:
-  - itemSO: {fileID: 11400000, guid: f884a7a6a74bc2e4fa21af6e63f6da1b, type: 2}
+  - itemSO: {fileID: 11400000, guid: ab8848ba423277e489178828864ef8e9, type: 2}
     price: 14
   shopArmors:
-  - itemSO: {fileID: 11400000, guid: d37250b3456a9594280598c3f8bf6382, type: 2}
+  - itemSO: {fileID: 11400000, guid: 1ad9f3e0fddba4d4aa014b8645f55f9d, type: 2}
     price: 10
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}

@@ -19,7 +19,7 @@ public class ShopInfo : MonoBehaviour
         infoPanelRect = GetComponent<RectTransform>();
     }
 
-    public void ShowItemInfo(ItemSO itemSO) 
+    public void ShowItemInfo(ItemAbs_SO itemSO) 
     {
         infoPanel.alpha = 1;
 
@@ -27,16 +27,12 @@ public class ShopInfo : MonoBehaviour
         itemDescriptionText.text = itemSO.ItemDescription;
 
         List<string> stats = new List<string>();
-        if (itemSO.maxHealth > 0)
-            stats.Add("MaxHealth: " + itemSO.currentHealth.ToString());
-        if (itemSO.currentHealth > 0)
-            stats.Add("Health: " + itemSO.currentHealth.ToString());
-        if (itemSO.damage > 0)
-            stats.Add("Damage: " + itemSO.currentHealth.ToString());
-        if (itemSO.speed > 0)
-            stats.Add("Speed: " + itemSO.currentHealth.ToString());
-        if (itemSO.duration > 0)
-            stats.Add("Duration: " + itemSO.currentHealth.ToString());
+
+        foreach (var item in itemSO.GetItemStats())
+        {
+            stats.Add(item.ToString());
+        }
+        
 
         if (stats.Count <= 0) 
         {

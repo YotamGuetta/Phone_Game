@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 6565704317333322239}
   - component: {fileID: 5180291034874043408}
   m_Layer: 0
-  m_Name: LootPrefab
+  m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,6 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5066aaec705dd4e449cad0163ea89f07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemSO: {fileID: 0}
+  itemSO: {fileID: 11400000, guid: ce8f504951b33094ca7a4117245aeb7a, type: 2}
   quantity: 2
   sr: {fileID: 7268077887459556329}
+  CanBePickedup: 1
