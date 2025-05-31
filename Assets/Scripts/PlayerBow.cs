@@ -23,17 +23,19 @@ public class PlayerBow : MonoBehaviour
 
     private void Update()
     {
-        shootTimer -= Time.deltaTime;
-
-        //handleAiming();
-
-        if (Input.GetButtonDown("Fire1") && shootTimer <= 0)
+        if (shootTimer > 0)
+        {
+            shootTimer -= Time.deltaTime;
+        }
+    }
+    public void Shoot() 
+    {
+        if (shootTimer <= 0)
         {
             handleAiming();
             playerMovement.SetIsPlayerAiming(true);
             ShootInADirection?.Invoke(aimDirection);
         }
-
     }
     private void OnEnable()
     {
@@ -56,7 +58,7 @@ public class PlayerBow : MonoBehaviour
         }
     }
 
-    public void Shoot() 
+    public void GenerateArrow() 
     {
         if (shootTimer <= 0)
         {

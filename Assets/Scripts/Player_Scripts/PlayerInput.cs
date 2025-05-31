@@ -6,12 +6,14 @@ public class PlayerInput : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
     private PlayerBow playerBow;
+    private SkillAbilityManager skillAbilityManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerCombat = GetComponent<PlayerCombat>();
         playerBow = GetComponent<PlayerBow>();
+        skillAbilityManager = GetComponentInChildren<SkillAbilityManager>();
     }
     public void InputPressed(buttonOutput output) {
         switch (output) {
@@ -27,9 +29,9 @@ public class PlayerInput : MonoBehaviour
     {
         Debug.Log("player Hold : " + output);
     }
-    public void CheckForAttackInputs() 
+    public void CheckForAttackInputs()
     {
-        if (playerCombat.enabled == false) 
+        if (playerCombat.enabled == false)
         {
             return;
         }
@@ -56,13 +58,29 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         checkForCharecterChange();
+        checkIfPlayerShoot();
+        checkIfPlayerCastSkill();
     }
-    private void checkForCharecterChange() 
+    private void checkForCharecterChange()
     {
         if (Input.GetButtonDown("SwitchPlayer"))
         {
             playerCombat.enabled = !playerCombat.enabled;
             playerBow.enabled = !playerBow.enabled;
+        }
+    }
+    private void checkIfPlayerShoot()
+    {
+        if (Input.GetButtonDown("Fire1") && playerBow.enabled)
+        {
+            playerBow.Shoot();
+        }
+    }
+    private void checkIfPlayerCastSkill()
+    {
+        if (Input.GetButtonDown("Fire2"))
+        {
+            skillAbilityManager.ActivateSkill();
         }
     }
 }

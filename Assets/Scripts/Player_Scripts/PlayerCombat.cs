@@ -86,12 +86,7 @@ public class PlayerCombat : MonoBehaviour
             //Add new enemy to show his health
             if (lastEnemyHit != enemies[0])
             {
-                if (lastEnemyHit != null) 
-                {
-                    lastEnemyHit.GetComponent<HealthPointsTracker>().FreeHealthInSlider();
-                }
-                lastEnemyHit = enemies[0].gameObject;
-                lastEnemyHit.GetComponent<HealthPointsTracker>().ShowHealthInSlider(enemyHealthSlider);
+                ShowEnemyHealth(enemies[0].gameObject);
             }
             // Deal damage to enemy and aplay stun, knockback
             foreach (Collider2D enemy in enemies)
@@ -101,5 +96,13 @@ public class PlayerCombat : MonoBehaviour
             }
         }
     }
-
+    public void ShowEnemyHealth(GameObject enemy) 
+    {
+        if (lastEnemyHit != null) 
+        {
+            lastEnemyHit.GetComponent<HealthPointsTracker>().FreeHealthInSlider();
+        }
+        lastEnemyHit = enemy;
+        lastEnemyHit.GetComponent<HealthPointsTracker>().ShowHealthInSlider(enemyHealthSlider);
+    }
 }

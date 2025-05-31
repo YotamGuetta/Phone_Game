@@ -99,7 +99,7 @@ public class AnimationsEvents : MonoBehaviour
     }
     public void Shoot()
     {
-        playerBow.Shoot();
+        playerBow.GenerateArrow();
     }
     private void OnEnable()
     {

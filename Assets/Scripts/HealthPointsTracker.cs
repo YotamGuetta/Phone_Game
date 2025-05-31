@@ -66,6 +66,10 @@ public class HealthPointsTracker : MonoBehaviour
             if (showHealthInSlider) 
             {
                 slider.value = currentHealth;
+                if (currentHealth <= 0) 
+                {
+                    FreeHealthInSlider();
+                }
             }
         }
     }
