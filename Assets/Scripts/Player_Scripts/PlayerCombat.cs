@@ -9,7 +9,9 @@ public class PlayerCombat : MonoBehaviour
 
 
     [SerializeField] private Transform upAttackPoint;
+    [SerializeField] private Transform upForwardAttackPoint;
     [SerializeField] private Transform forwardAttackPoint;
+    [SerializeField] private Transform downForwardAttackPoint;
     [SerializeField] private Transform downAttackPoint;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject enemyHealthSlider;
@@ -49,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void setActivaAttackPoint(eightDirection attackDirection)
     {
-        switch (attackDirection) 
+        switch (attackDirection)
         {
             case eightDirection.up:
                 activeAttackPoint = upAttackPoint;
@@ -57,11 +59,20 @@ public class PlayerCombat : MonoBehaviour
             case eightDirection.down:
                 activeAttackPoint = downAttackPoint;
                 break;
+            case eightDirection.downLeft:
+            case eightDirection.downRight:
+                activeAttackPoint = downForwardAttackPoint;
+                break;
+            case eightDirection.upLeft:
+            case eightDirection.upRight:
+                activeAttackPoint = upForwardAttackPoint;
+                break;
             default:
                 activeAttackPoint = forwardAttackPoint;
                 break;
         }
     }
+    //The direction the player and his sprite is facing
     private void setDirectionFacing(eightDirection attackDirection)
     {
         switch (attackDirection)

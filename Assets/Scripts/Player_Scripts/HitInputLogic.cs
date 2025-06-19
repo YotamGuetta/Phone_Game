@@ -54,21 +54,24 @@ public class HitInputLogic : MonoBehaviour
         eightDirection eDirection;
         if ((eDirection = checkJab()) == eightDirection.center)
         {
-            if ((eDirection = checkHalfCircle()) == eightDirection.center)
+            if ((eDirection = checkFullCircle()) == eightDirection.center)
             {
-                if ((eDirection = checkReverseHalfCircle()) == eightDirection.center)
+                if ((eDirection = checkHalfCircle()) == eightDirection.center)
                 {
-                    if ((eDirection = checkArc()) == eightDirection.center)
+                    if ((eDirection = checkReverseHalfCircle()) == eightDirection.center)
                     {
-                        if ((eDirection = checkReverseArc()) == eightDirection.center)
+                        if ((eDirection = checkArc()) == eightDirection.center)
                         {
-                            Debug.Log("is jibrish");
+                            if ((eDirection = checkReverseArc()) == eightDirection.center)
+                            {
+                                Debug.Log("is jibrish");
+                            }
                         }
                     }
                 }
             }
         }
-        else 
+        else
         {
             playerCombat.Attack(eDirection);
         }
@@ -127,5 +130,14 @@ public class HitInputLogic : MonoBehaviour
     private eightDirection checkReverseHalfCircle()
     {
         return CheckPattern(5, false, "reverse half circle");
+    }
+    private eightDirection checkFullCircle()
+    {
+        eightDirection direction =  CheckPattern(7, true, "full circle");
+        if (direction != eightDirection.center) 
+        {
+            return direction;
+        }
+        return CheckPattern(7, false, "full circle");
     }
 }

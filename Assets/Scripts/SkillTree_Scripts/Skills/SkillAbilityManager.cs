@@ -14,20 +14,21 @@ public class SkillAbilityManager : MonoBehaviour
 
     private SkillAnimationManager SkillAnimationManager;
     private float skillTimer = 0;
-
+    private List<GameObject> enemiesIncountered;
     private void Start()
     {
         SkillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
+        enemiesIncountered = new List<GameObject>();
     }
     private void OnEnable()
     {
         SkillAnimationManager.OnAnimationEnded += endSkill;
-        SkillAnimationManager.OnAnimationApex += DealDamage;
+        //SkillAnimationManager.OnAnimationApex += DealDamage;
     }
     private void OnDisable()
     {
         SkillAnimationManager.OnAnimationEnded -= endSkill;
-        SkillAnimationManager.OnAnimationApex -= DealDamage;
+        //SkillAnimationManager.OnAnimationApex -= DealDamage;
 
     }
     private void Update()
@@ -39,11 +40,41 @@ public class SkillAbilityManager : MonoBehaviour
     }
     private void endSkill()
     {
+        enemiesIncountered.Clear();
         Destroy(GetComponent<Collider2D>());
     }
     public void ActivateSkill() 
     {
         ActivateSkill(skill);
+    }
+    //for dealing damage once while collider is active
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //prevents the same enemy to get damaged multible times
+        if (enemiesIncountered.Contains(collision.gameObject)) 
+        {
+            return;
+        }
+        enemiesIncountered.Add(collision.gameObject);
+
+        // checks if the object is an enemy
+        if (collision.tag == LayerMask.LayerToName((int)Mathf.Log(enemyLayer.value, 2))) 
+        {
+            HealthPointsTracker health = collision.GetComponent<HealthPointsTracker>();
+            EnemyKnockback knockback = collision.GetComponent<EnemyKnockback>();
+            if (health != null)
+            {
+                if (playerCombat != null)
+                {
+                    playerCombat.ShowEnemyHealth(collision.gameObject);
+                }
+                health.CurrentHealth -= skill.Damage;
+            }
+            if (knockback != null)
+            {
+                knockback.Knockback(transform, skill.KnockbackForce, skill.KnockbackDuration, skill.StunTime);
+            }
+        } 
     }
     public void ActivateSkill(SkillAbilitySO newSkill)
     {
@@ -72,9 +103,9 @@ public class SkillAbilityManager : MonoBehaviour
 
         }
     }
+    //for dealing damage once in a single frame
     public void DealDamage()
     {
-        Debug.Log("Dealing damage");
         Collider2D collider2D = GetComponent<Collider2D>();
         if (collider2D != null) 
         {
@@ -82,12 +113,10 @@ public class SkillAbilityManager : MonoBehaviour
             filter.layerMask = enemyLayer;
             List<Collider2D> results = new List<Collider2D>();
             int numberOfEnemies = collider2D.Overlap(filter, results);
-            Debug.Log("found : "+ numberOfEnemies);
             if (numberOfEnemies > 0)
             {
                 foreach (var collider in results)
                 {
-                    Debug.Log("An enemy ! ");
                     HealthPointsTracker health = collider.GetComponent<HealthPointsTracker>();
                     EnemyKnockback knockback = collider.GetComponent<EnemyKnockback>();
                     if (health != null)
