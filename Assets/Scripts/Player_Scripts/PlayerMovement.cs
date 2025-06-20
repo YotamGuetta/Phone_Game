@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : UnitController
 {
     public FixedJoystick joystick;
     public Animator anim;
@@ -12,12 +12,12 @@ public class PlayerMovement : MonoBehaviour
     private float hInput, vInput;
     private Rigidbody2D rb;
     
-    private int facingDirection = 1;
     private bool isKnockedback;
     private PlayerInput playerInput;
 
     private float currSpeed;
     private bool isShooting = false;
+    private bool isSkillActive = false;
 
     public Vector2 LastDirectionMoved { get { return lastDirectionMoved; } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,6 +28,16 @@ public class PlayerMovement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         currSpeed = PlayerStatsManager.Instance.movementSpeed;
     }
+    private void OnEnable()
+    {
+        SkillAbilityManager.SkillActivated += skillActivated;
+        SkillAbilityManager.SkillFinished += skillFinished;
+    }
+    private void OnDisable()
+    {
+        SkillAbilityManager.SkillActivated -= skillActivated;
+        SkillAbilityManager.SkillFinished -= skillFinished;
+    }
     private void Update()
     {
         playerInput.CheckForAttackInputs();
@@ -36,6 +46,14 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         playerJoystickMovement();
+    }
+    private void skillActivated() 
+    {
+        isSkillActive = true;
+    }
+    private void skillFinished()
+    {
+        isSkillActive = false;
     }
     public void SetIsPlayerAiming(bool IsShooting) 
     {
@@ -63,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //flipe sprite if the player is walking the opposite direction he is faceing
             if ((hInput > 0 && transform.localScale.x < 0 ||
-            hInput < 0 && transform.localScale.x > 0) && !isShooting)
+            hInput < 0 && transform.localScale.x > 0) && !isShooting && isSkillActive)
             {
                 flipPlayerSprite();
             }
@@ -76,19 +94,20 @@ public class PlayerMovement : MonoBehaviour
             anim.SetFloat("Horizontal", Math.Abs(hInput));
             anim.SetFloat("Vertical", Math.Abs(vInput));
 
-            //Move player
-            rb.linearVelocity = new Vector2(hInput, vInput) * currSpeed;
+            //           MOVE PLAYER
 
-            /*
-            Vector3 moveDirection = new Vector3(hInput, vInput, 0).normalized * movementSpeed;
-            transform.position += moveDirection * Time.deltaTime;
-            */
+            //Normalize for accurate diagonal speed.
+            //Multiplied by the max value to keep the accurate movement momentum.
+            Vector2 velocity = new Vector2(hInput, vInput).normalized
+                * Mathf.Max(Mathf.Abs(hInput), Mathf.Abs(vInput))
+                * currSpeed;
+            //Slower movement when using a skill
+            if (isSkillActive) 
+            {
+                velocity *= PlayerStatsManager.Instance.aimingMovmentPenelty;
+            }
+            rb.linearVelocity = velocity;
         }
-
-    }
-    void flipPlayerSprite() {
-        facingDirection *= -1;
-        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
     }
     public void Knockedback(Transform enemy, float knockbackForce, float stunTime) 
     {

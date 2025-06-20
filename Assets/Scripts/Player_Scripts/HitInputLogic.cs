@@ -11,6 +11,7 @@ public class HitInputLogic : MonoBehaviour
 
     private eightDirection lastDirectionChange;
     private PlayerCombat playerCombat;
+    [SerializeField] private SkillAbilityManager skillAbilityManager;
     public eightDirection LastDirectionChange   // get property
     {
         get { return lastDirectionChange; }
@@ -73,7 +74,8 @@ public class HitInputLogic : MonoBehaviour
         }
         else
         {
-            playerCombat.Attack(eDirection);
+            //playerCombat.Attack(eDirection);
+            skillAbilityManager.ActivateSkill(eDirection);
         }
         return eDirection;
     }

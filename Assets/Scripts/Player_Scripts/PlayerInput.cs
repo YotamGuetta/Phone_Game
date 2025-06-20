@@ -31,6 +31,50 @@ public class PlayerInput : MonoBehaviour
     }
     public void CheckForAttackInputs()
     {
+        checkCombatInput();
+        checkSkillInput();
+    }
+    private void checkSkillInput() 
+    {
+        if (skillAbilityManager.enabled == false)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.downLeft);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.down);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.downRight);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.left);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.right);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad7))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.upLeft);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.up);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad9))
+        {
+            skillAbilityManager.ActivateSkill(eightDirection.upRight);
+        }
+    }
+    private void checkCombatInput() 
+    {
         if (playerCombat.enabled == false)
         {
             return;
@@ -80,7 +124,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire2"))
         {
-            skillAbilityManager.ActivateSkill();
+            //skillAbilityManager.ActivateSkill();
         }
     }
 }

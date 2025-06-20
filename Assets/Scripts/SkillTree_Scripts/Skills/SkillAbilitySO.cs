@@ -18,7 +18,7 @@ public class SkillAbilitySO : ScriptableObject
     [SerializeField] private float knockbackDuration;
     [SerializeField] private float stunTime;
     public float Size { get { return size; } }
-    public float Range { get { return range; } }
+    public float Range { get { return range; }}
     public int Damage { get { return damage; } }
     public shape AreaShape { get { return areaShape; } }
     public float Angle { get { return angle; } }
@@ -28,18 +28,28 @@ public class SkillAbilitySO : ScriptableObject
     public float KnockbackForce { get { return knockbackForce; } }
     public float KnockbackDuration { get { return knockbackDuration; } }
     public float StunTime { get { return stunTime; } }
+    public void skillEnded() 
+    {
+       
+    }
     public void CreateConeColliderForSkill(GameObject obj) 
     {
         CreateConeCollider(obj, size, angle, segments);
     }
-
-    public void CreateConeCollider(GameObject obj, float radius, float angle, int segments)
+    public void CreateConeCollider(GameObject obj, Vector3 possition, Quaternion rotation)
+    {
+        CreateConeCollider(obj, size, angle, segments);
+        obj.transform.rotation = rotation;
+        obj.transform.position = possition;
+    }
+        public void CreateConeCollider(GameObject obj, float radius, float angle, int segments)
     {
         PolygonCollider2D poly = obj.AddComponent<PolygonCollider2D>();
 
         poly.isTrigger = true;
         //poly.transform.position = obj.transform.position + new Vector3(range, 0, 0);
         //poly.transform.Rotate(-obj.transform.rotation.eulerAngles);
+        poly.offset += new Vector2(range, 0);
         List<Vector2> points = new List<Vector2> { Vector2.zero }; // center point
 
         float halfAngle = angle / 2f;
@@ -56,15 +66,27 @@ public class SkillAbilitySO : ScriptableObject
     {
         BoxCollider2D boxCollider = obj.AddComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
-        boxCollider.size = new Vector2(size + obj.transform.localScale.x, obj.transform.localScale.y);
-        boxCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
+        boxCollider.size = new Vector2(size * obj.transform.localScale.x, obj.transform.localScale.y);
+        //boxCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
+        boxCollider.offset += new Vector2(range, 0);
+    }
+    public void CreateBoxColliderForSkill(GameObject obj, Vector3 possition, Quaternion rotation)
+    {
+        BoxCollider2D boxCollider = obj.AddComponent<BoxCollider2D>();
+        boxCollider.isTrigger = true;
+        boxCollider.size = new Vector2(size * obj.transform.localScale.x, obj.transform.localScale.y);
+        boxCollider.transform.rotation = rotation;
+        boxCollider.transform.position = possition;
+        //boxCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
+        boxCollider.offset += new Vector2(range, 0);
     }
     public void CreateCircleColliderForSkill(GameObject obj)
     {
         CircleCollider2D circleCollider = obj.AddComponent<CircleCollider2D>();
         circleCollider.isTrigger = true;
         circleCollider.radius = size * obj.transform.localScale.y;
-        circleCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
+        //circleCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
+        circleCollider.offset += new Vector2(range, 0);
     }
 }
 public enum shape 

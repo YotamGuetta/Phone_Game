@@ -1,24 +1,30 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 public class SkillAbilityManager : MonoBehaviour
 {
+    public static Action SkillActivated;
+    public static Action SkillFinished;
 
     [SerializeField] private SkillAbilitySO skill;
     [SerializeField] private Vector3 direction = Vector3.right;
-    [SerializeField] private Vector3 position = Vector3.zero;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private PlayerCombat playerCombat;
 
     private SkillAnimationManager SkillAnimationManager;
     private float skillTimer = 0;
     private List<GameObject> enemiesIncountered;
+    private UnitController unitController;
+
+
     private void Start()
     {
         SkillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
         enemiesIncountered = new List<GameObject>();
+        unitController = GetComponentInParent<UnitController>();
     }
     private void OnEnable()
     {
@@ -40,13 +46,12 @@ public class SkillAbilityManager : MonoBehaviour
     }
     private void endSkill()
     {
+        skill.skillEnded();
         enemiesIncountered.Clear();
         Destroy(GetComponent<Collider2D>());
+        SkillFinished?.Invoke();
     }
-    public void ActivateSkill() 
-    {
-        ActivateSkill(skill);
-    }
+
     //for dealing damage once while collider is active
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -76,17 +81,25 @@ public class SkillAbilityManager : MonoBehaviour
             }
         } 
     }
-    public void ActivateSkill(SkillAbilitySO newSkill)
+    public void ActivateSkill(eightDirection attackDirection)
+    {
+        ActivateSkill(skill, attackDirection);
+    }
+    public void ActivateSkill(SkillAbilitySO newSkill, eightDirection attackDirection)
     {
         skill = newSkill;
         if (skillTimer <= 0) 
         {
+            SkillActivated?.Invoke();
+            unitController.SetAttackDirection(attackDirection);
             switch (skill.AreaShape)
             {
                 case shape.Cone:
-                    skill.CreateConeColliderForSkill(gameObject); break;
+                    skill.CreateConeCollider(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
+                    break;
                 case shape.Square:
-                    skill.CreateBoxColliderForSkill(gameObject); break;
+                    skill.CreateBoxColliderForSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
+                    break;
                 case shape.Circle:
                     skill.CreateCircleColliderForSkill(gameObject); break;
             }
@@ -98,7 +111,7 @@ public class SkillAbilityManager : MonoBehaviour
     {
         if (SkillAnimationManager != null && skill.AnimationClip != null)
         {
-
+            SkillAnimationManager.transform.position = direction;
             SkillAnimationManager.StartAnimation(skill.AnimationClip.name);
 
         }
@@ -156,7 +169,7 @@ public class SkillAbilityManager : MonoBehaviour
     }
     private void drawGizmosSquaree()
     {
-        Vector3 position = transform.position + new Vector3(skill.Range, 0, 0);
+        Vector3 position = transform.position + new Vector3(skill.Range * direction.x, direction.y, 0);
         Gizmos.DrawWireCube(position, new Vector3(skill.Size, transform.localScale.y, 0));
     }
     private void drawGizmosCone()
