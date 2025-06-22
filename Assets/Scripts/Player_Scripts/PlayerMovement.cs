@@ -81,7 +81,7 @@ public class PlayerMovement : UnitController
         {
             //flipe sprite if the player is walking the opposite direction he is faceing
             if ((hInput > 0 && transform.localScale.x < 0 ||
-            hInput < 0 && transform.localScale.x > 0) && !isShooting && isSkillActive)
+            hInput < 0 && transform.localScale.x > 0) && !isShooting && !isSkillActive)
             {
                 flipPlayerSprite();
             }

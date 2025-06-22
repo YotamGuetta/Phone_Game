@@ -26,7 +26,11 @@ public class ExitElevasionLogic : MonoBehaviour
                 //boundary.enabled = false;
             }
             //collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
-            collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 5;
+            //collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 5;
+            foreach (SpriteRenderer spriteRenderer in collision.gameObject.GetComponentsInChildren<SpriteRenderer>())
+            {
+                spriteRenderer.sortingOrder = 5;
+            }
 
             //Arrows Elevasion
             if (collision.gameObject.tag == "Player")

@@ -13,11 +13,11 @@ public class ElevasionLogic : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
-            
+
             foreach (Collider2D mountain in mountainColliders)
             {
                 ignoreAllColliders(collision, mountain, true);
-                
+
                 //mountain.enabled = false;
             }
 
@@ -27,7 +27,12 @@ public class ElevasionLogic : MonoBehaviour
                 boundary.enabled = true;
             }
             //collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
-            collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 15;
+            //collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 15;
+
+            foreach (SpriteRenderer spriteRenderer in collision.gameObject.GetComponentsInChildren<SpriteRenderer>())
+            {
+                spriteRenderer.sortingOrder = 15;
+            }
 
             //Arrows Elevasion
             if (collision.gameObject.tag == "Player")
