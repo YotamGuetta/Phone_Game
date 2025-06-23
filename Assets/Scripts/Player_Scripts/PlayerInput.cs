@@ -1,19 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
+ 
 
 public class PlayerInput : MonoBehaviour
 {
+    
+
     [SerializeField] private float DashPower;
+    [SerializeField] private float ComboCooldown;
+
+    private HitInputLogic hitInputLogic;
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
     private PlayerBow playerBow;
     private SkillAbilityManager skillAbilityManager;
+    private List<eightDirection> inputsQueue;
+    private float CurrentCommboCountdown = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        hitInputLogic = GetComponent<HitInputLogic>();
         playerMovement = GetComponent<PlayerMovement>();
         playerCombat = GetComponent<PlayerCombat>();
         playerBow = GetComponent<PlayerBow>();
         skillAbilityManager = GetComponentInChildren<SkillAbilityManager>();
+        inputsQueue = new List<eightDirection>();
     }
     public void InputPressed(buttonOutput output) {
         switch (output) {
@@ -33,6 +45,18 @@ public class PlayerInput : MonoBehaviour
     {
         checkCombatInput();
         checkSkillInput();
+        if (CurrentCommboCountdown > 0)
+        {
+            CurrentCommboCountdown -= Time.deltaTime;
+        }
+        else
+        {
+            if (inputsQueue.Count > 0) 
+            {
+                hitInputLogic.CheckActionByInputs(inputsQueue);
+                inputsQueue.Clear();
+            }
+        }
     }
     private void checkSkillInput() 
     {
@@ -40,37 +64,49 @@ public class PlayerInput : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        for (KeyCode key = KeyCode.Keypad1; key <= KeyCode.Keypad9; key++)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.downLeft);
+            if (Input.GetKeyDown(key))
+            {
+                CurrentCommboCountdown = ComboCooldown;
+                getInputByKey(key);
+                break;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+    }
+    private void getInputByKey(KeyCode key) 
+    {
+        if (key == KeyCode.Keypad1)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.down);
+            inputsQueue.Add(eightDirection.downLeft);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (key == KeyCode.Keypad2)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.downRight);
+            inputsQueue.Add(eightDirection.down);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
+        if (key == KeyCode.Keypad3)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.left);
+            inputsQueue.Add(eightDirection.downRight);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad6))
+        if (key == KeyCode.Keypad4)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.right);
+            inputsQueue.Add(eightDirection.left);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad7))
+        if (key == KeyCode.Keypad6)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.upLeft);
+            inputsQueue.Add(eightDirection.right);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad8))
+        if (key == KeyCode.Keypad7)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.up);
+            inputsQueue.Add(eightDirection.upLeft);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad9))
+        if (key == KeyCode.Keypad8)
         {
-            skillAbilityManager.ActivateSkill(eightDirection.upRight);
+            inputsQueue.Add(eightDirection.up);
+        }
+        if (key == KeyCode.Keypad9)
+        {
+            inputsQueue.Add(eightDirection.upRight);
         }
     }
     private void checkCombatInput() 

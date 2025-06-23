@@ -7,85 +7,93 @@ using System.Linq;
 
 public class HitInputLogic : MonoBehaviour
 {
+    public event Action CheckButtonHit;
+    public event Action CheckButtonRelease;
+
     public FixedJoystick joystick;
 
-    private eightDirection lastDirectionChange;
-    private PlayerCombat playerCombat;
     [SerializeField] private SkillAbilityManager skillAbilityManager;
-    public eightDirection LastDirectionChange   // get property
+
+    List<eightDirection> inputsQueueHitButton;
+    List<eightDirection> inputsQueue;
+
+    private eightDirection lastDirectionChange;
+    public eightDirection LastDirectionChange
     {
         get { return lastDirectionChange; }
     }
-
-    List<eightDirection> inputsQueue;
-    public event Action CheckButtonHit;
-    public event Action CheckButtonRelease;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        inputsQueue = new List<eightDirection>();
+        inputsQueueHitButton = new List<eightDirection>();
         joystick.JoystickReleased += OnJoystickLetGo;
-        playerCombat = GetComponent<PlayerCombat>();
     }
     // Update is called once per frame
     void Update()
     {
+        //Stores every movement in the hitbox untill it is released
         eightDirection newDirection = joystick.EnumDirection;
-        if (lastDirectionChange != newDirection) {
-            inputsQueue.Add(newDirection);
-            //Debug.Log("from :" + lastDirectionChange + " to: " + newDirection);
+        if (lastDirectionChange != newDirection)
+        {
+            inputsQueueHitButton.Add(newDirection);
             lastDirectionChange = newDirection;
             CheckButtonHit?.Invoke();
         }
-        
+
     }
     private void OnJoystickLetGo()
     {
+        //Checks what action intended buy the input string
+        CheckActionByInputs(inputsQueueHitButton);
 
-        //foreach (eightDirection direction in inputsQueue)
-
-        checkActionByInputs();
-
-        inputsQueue.Clear();
+        inputsQueueHitButton.Clear();
         lastDirectionChange = eightDirection.center;
         CheckButtonRelease?.Invoke();
     }
-    private eightDirection checkActionByInputs() {
-        Debug.Log("Checking hit input");
+    public eightDirection CheckActionByInputs(List<eightDirection> newInputsQueue)
+    {
         eightDirection eDirection;
+        inputsQueue = newInputsQueue;
+
+        Debug.Log("Checking hit input");
+
+        //Check every input string possibility for the input
         if ((eDirection = checkJab()) == eightDirection.center)
-        {
             if ((eDirection = checkFullCircle()) == eightDirection.center)
-            {
                 if ((eDirection = checkHalfCircle()) == eightDirection.center)
-                {
                     if ((eDirection = checkReverseHalfCircle()) == eightDirection.center)
-                    {
                         if ((eDirection = checkArc()) == eightDirection.center)
-                        {
                             if ((eDirection = checkReverseArc()) == eightDirection.center)
-                            {
                                 Debug.Log("is jibrish");
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                            else
+                                skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
+                        else
+                            skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
+                    else
+                        skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
+                else
+                    skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
+            else
+                skillAbilityManager.ActivateSkill(eDirection, skillType.Circle);
         else
-        {
-            //playerCombat.Attack(eDirection);
-            skillAbilityManager.ActivateSkill(eDirection);
-        }
+            skillAbilityManager.ActivateSkill(eDirection, skillType.Jab);
         return eDirection;
     }
-    private eightDirection checkJab() {
-        if (inputsQueue.Count == 1) {
+    //                 0
+    //              0     0
+    //            0         *
+    //              0     0
+    //                 0
+    private eightDirection checkJab()
+    {
+        if (inputsQueue.Count == 1)
+        {
             Debug.Log("is jab");
             return inputsQueue[0];
         }
         return eightDirection.center;
     }
+
     private eightDirection CheckPattern(int length, bool clockwise, string patternName)
     {
         if (inputsQueue.Count < length) return eightDirection.center;
@@ -114,29 +122,51 @@ public class HitInputLogic : MonoBehaviour
         // Optionally return center/middle element as the result
         return inputsQueue[length / 2];
     }
+    //                 0
+    //              0     *   
+    //            0         *
+    //              0     *
+    //                 0
     private eightDirection checkArc()
     {
         return CheckPattern(3, true, "arc");
     }
-
+    //                 0
+    //              0     *    
+    //            0         * 
+    //              0     *
+    //                 0
     private eightDirection checkReverseArc()
     {
         return CheckPattern(3, false, "reverse arc");
     }
-
+    //                 *
+    //              0     *    
+    //            0         * 
+    //              0     *
+    //                 *
     private eightDirection checkHalfCircle()
     {
         return CheckPattern(5, true, "half circle");
     }
-
+    //                 *
+    //              0     *    
+    //            0         * 
+    //              0     *
+    //                 *
     private eightDirection checkReverseHalfCircle()
     {
         return CheckPattern(5, false, "reverse half circle");
     }
+    //                 *
+    //              *     *    
+    //            0         * 
+    //              *     *
+    //                 *
     private eightDirection checkFullCircle()
     {
-        eightDirection direction =  CheckPattern(7, true, "full circle");
-        if (direction != eightDirection.center) 
+        eightDirection direction = CheckPattern(7, true, "full circle");
+        if (direction != eightDirection.center)
         {
             return direction;
         }

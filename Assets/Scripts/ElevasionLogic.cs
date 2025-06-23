@@ -14,21 +14,21 @@ public class ElevasionLogic : MonoBehaviour
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
 
+            //Makes the enemy or player able to ignore all colliders when elevating up
             foreach (Collider2D mountain in mountainColliders)
             {
                 ignoreAllColliders(collision, mountain, true);
 
-                //mountain.enabled = false;
             }
 
+            //Makes the enemy or player unable to move throw the mountain boarder colliders when elevating up
             foreach (Collider2D boundary in boundaryColliders)
             {
                 ignoreAllColliders(collision, boundary, false);
                 boundary.enabled = true;
             }
-            //collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
-            //collision.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 15;
 
+            //Makes all the target sprites render on top of the mountain 
             foreach (SpriteRenderer spriteRenderer in collision.gameObject.GetComponentsInChildren<SpriteRenderer>())
             {
                 spriteRenderer.sortingOrder = 15;

@@ -4,206 +4,99 @@ using UnityEngine;
 using System;
 
 
+
 public class SkillAbilityManager : MonoBehaviour
 {
+
     public static Action SkillActivated;
     public static Action SkillFinished;
 
-    [SerializeField] private SkillAbilitySO skill;
+    [SerializeField] private SkillsDictionary typeToSkill;
     [SerializeField] private Vector3 direction = Vector3.right;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private PlayerCombat playerCombat;
+    public GameObject skillExecutioner;
 
-    private SkillAnimationManager SkillAnimationManager;
     private float skillTimer = 0;
-    private List<GameObject> enemiesIncountered;
     private UnitController unitController;
-
+    Dictionary<skillType, SkillAbillityExecutioner> skillsToTypeDictionary;
+    private bool skillIsActive = false;
 
     private void Start()
     {
-        SkillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
-        enemiesIncountered = new List<GameObject>();
         unitController = GetComponentInParent<UnitController>();
+        skillsToTypeDictionary = InitializeDictionary();
     }
-    private void OnEnable()
+    private Dictionary<skillType, SkillAbillityExecutioner> InitializeDictionary()
     {
-        SkillAnimationManager.OnAnimationEnded += endSkill;
-        //SkillAnimationManager.OnAnimationApex += DealDamage;
-    }
-    private void OnDisable()
-    {
-        SkillAnimationManager.OnAnimationEnded -= endSkill;
-        //SkillAnimationManager.OnAnimationApex -= DealDamage;
+        Dictionary<skillType, SkillAbillityExecutioner> skillsDictionaryItems = new Dictionary<skillType, SkillAbillityExecutioner>();
 
+        foreach (var item in typeToSkill.skillsItems)
+        {
+            SkillAbillityExecutioner skillAbillityExecutioner = Instantiate(skillExecutioner,transform).GetComponent<SkillAbillityExecutioner>();
+            skillAbillityExecutioner.Initialize(item.skillAbilitySO, unitController, enemyLayer, playerCombat);
+            skillsDictionaryItems.Add(item.type, skillAbillityExecutioner);
+        }
+
+        return skillsDictionaryItems;
     }
     private void Update()
     {
-        if (skillTimer > 0) 
+        if (skillTimer > 0)
         {
             skillTimer -= Time.deltaTime;
         }
-    }
-    private void endSkill()
-    {
-        skill.skillEnded();
-        enemiesIncountered.Clear();
-        Destroy(GetComponent<Collider2D>());
-        SkillFinished?.Invoke();
-    }
-
-    //for dealing damage once while collider is active
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //prevents the same enemy to get damaged multible times
-        if (enemiesIncountered.Contains(collision.gameObject)) 
+        else 
         {
-            return;
-        }
-        enemiesIncountered.Add(collision.gameObject);
-
-        // checks if the object is an enemy
-        if (collision.tag == LayerMask.LayerToName((int)Mathf.Log(enemyLayer.value, 2))) 
-        {
-            HealthPointsTracker health = collision.GetComponent<HealthPointsTracker>();
-            EnemyKnockback knockback = collision.GetComponent<EnemyKnockback>();
-            if (health != null)
+            if (skillIsActive) 
             {
-                if (playerCombat != null)
+                SkillFinished?.Invoke();
+                skillIsActive = false;
+            }
+        }
+    }
+
+    public void ActivateSkill(eightDirection attackDirection, skillType type)
+    {
+        if (skillsToTypeDictionary.TryGetValue(type, out SkillAbillityExecutioner skillAbillity))
+        {
+            if (skillAbillity.ActivateSkill(attackDirection)) 
+            {
+                skillTimer = Mathf.Max(skillTimer, skillAbillity.SkillTimer);
+                if (!skillIsActive)
                 {
-                    playerCombat.ShowEnemyHealth(collision.gameObject);
-                }
-                health.CurrentHealth -= skill.Damage;
-            }
-            if (knockback != null)
-            {
-                knockback.Knockback(transform, skill.KnockbackForce, skill.KnockbackDuration, skill.StunTime);
-            }
-        } 
-    }
-    public void ActivateSkill(eightDirection attackDirection)
-    {
-        ActivateSkill(skill, attackDirection);
-    }
-    public void ActivateSkill(SkillAbilitySO newSkill, eightDirection attackDirection)
-    {
-        skill = newSkill;
-        if (skillTimer <= 0) 
-        {
-            SkillActivated?.Invoke();
-            unitController.SetAttackDirection(attackDirection);
-            switch (skill.AreaShape)
-            {
-                case shape.Cone:
-                    skill.CreateConeCollider(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                    break;
-                case shape.Square:
-                    skill.CreateBoxColliderForSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                    break;
-                case shape.Circle:
-                    skill.CreateCircleColliderForSkill(gameObject); break;
-            }
-            playAnimation();
-            skillTimer = skill.SkillCooldown;
-        }
-    }
-    private void playAnimation()
-    {
-        if (SkillAnimationManager != null && skill.AnimationClip != null)
-        {
-            SkillAnimationManager.transform.position = direction;
-            SkillAnimationManager.StartAnimation(skill.AnimationClip.name);
-
-        }
-    }
-    //for dealing damage once in a single frame
-    public void DealDamage()
-    {
-        Collider2D collider2D = GetComponent<Collider2D>();
-        if (collider2D != null) 
-        {
-            ContactFilter2D filter = new ContactFilter2D();
-            filter.layerMask = enemyLayer;
-            List<Collider2D> results = new List<Collider2D>();
-            int numberOfEnemies = collider2D.Overlap(filter, results);
-            if (numberOfEnemies > 0)
-            {
-                foreach (var collider in results)
-                {
-                    HealthPointsTracker health = collider.GetComponent<HealthPointsTracker>();
-                    EnemyKnockback knockback = collider.GetComponent<EnemyKnockback>();
-                    if (health != null)
-                    {
-                        if (playerCombat != null) 
-                        {
-                            playerCombat.ShowEnemyHealth(collider.gameObject);
-                        }
-                        health.CurrentHealth -= skill.Damage;
-                    }
-                    if (knockback != null)
-                    {
-                        knockback.Knockback(transform, skill.KnockbackForce, skill.KnockbackDuration, skill.StunTime);
-                    }
+                    SkillActivated?.Invoke();
+                    skillIsActive = true;
                 }
             }
         }
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        switch (skill.AreaShape)
+        else
         {
-            case shape.Cone:
-                drawGizmosCone(); break;
-            case shape.Square:
-                drawGizmosSquaree(); break;
-            case shape.Circle:
-                drawGizmosCircle(); break;
-
+            Debug.Log("No Skill " + type.ToString() + " In Dictionary.");
         }
     }
-    private void drawGizmosCircle()
-    {
-        Vector3 position = transform.position + new Vector3(skill.Range, 0, 0);
-        Gizmos.DrawWireSphere(position, skill.Size);
-    }
-    private void drawGizmosSquaree()
-    {
-        Vector3 position = transform.position + new Vector3(skill.Range * direction.x, direction.y, 0);
-        Gizmos.DrawWireCube(position, new Vector3(skill.Size, transform.localScale.y, 0));
-    }
-    private void drawGizmosCone()
-    {
+}
+public enum skillType 
+{
+    Jab,
+    Arc,
+    HalfCircle,
+    Circle
+}
 
-        Vector3 position = transform.position + new Vector3(skill.Range, 0, 0);
-        Vector3 origin = position;
-        Vector3 forward = direction; // or transform.up, depending on desired cone direction
+[Serializable]
+public class SkillsDictionary
+{
+    [SerializeField]
+    public SkillsDictionaryItem[] skillsItems;
 
-        // Draw center line
-        Gizmos.DrawLine(origin, origin + Quaternion.Euler(0, 0, -skill.Angle / 2f) * forward * skill.Size);
-        Gizmos.DrawLine(origin, origin + Quaternion.Euler(0, 0, skill.Angle / 2f) * forward * skill.Size);
+}
 
-        Vector3 previousPoint = origin + Quaternion.Euler(0, 0, -skill.Angle / 2f) * forward * skill.Size;
-
-        for (int i = 1; i <= skill.Segments; i++)
-        {
-            float step = skill.Angle / skill.Segments;
-            float currentAngle = -skill.Angle / 2f + step * i;
-            Vector3 nextPoint = origin + Quaternion.Euler(0, 0, currentAngle) * forward * skill.Size;
-
-            // Draw arc segment
-            Gizmos.DrawLine(previousPoint, nextPoint);
-            previousPoint = nextPoint;
-        }
-
-        // Optional: fill in the sides of the cone
-        for (int i = 0; i <= skill.Segments; i++)
-        {
-            float step = skill.Angle / skill.Segments;
-            float currentAngle = -skill.Angle / 2f + step * i;
-            Vector3 point = origin + Quaternion.Euler(0, 0, currentAngle) * forward * skill.Size;
-
-            Gizmos.DrawLine(origin, point);
-        }
-    }
+[Serializable]
+public class SkillsDictionaryItem
+{
+    [SerializeField]
+    public skillType type;
+    [SerializeField]
+    public SkillAbilitySO skillAbilitySO;
 }
