@@ -8,22 +8,21 @@ public class SkillAbillityExecutioner: MonoBehaviour
     public Action SkillFinished;
 
     [SerializeField] private SkillAbilitySO skill;
-    [SerializeField] private Vector3 direction = Vector3.right;
      private LayerMask enemyLayer;
-     private PlayerCombat playerCombat;
+     private PlayerInteractions playerInteractions;
 
     private SkillAnimationManager SkillAnimationManager;
     private float skillTimer = 0;
     private List<GameObject> enemiesIncountered;
     private UnitController unitController;
     public float SkillTimer { get { return skill.SkillCooldown; } }
-    public void Initialize(SkillAbilitySO skillAbilitySO, UnitController unitController, LayerMask enemyLayer, PlayerCombat playerCombat)
+    public void Initialize(SkillAbilitySO skillAbilitySO, UnitController unitController, LayerMask enemyLayer, PlayerInteractions playerInteractions)
     {
         skill = skillAbilitySO;
         this.unitController = unitController;
         SkillAnimationManager.OnAnimationEnded += endSkill;
         this.enemyLayer = enemyLayer;
-        this.playerCombat = playerCombat;
+        this.playerInteractions = playerInteractions;
     }
     private void Start()
     {
@@ -64,9 +63,9 @@ public class SkillAbillityExecutioner: MonoBehaviour
             EnemyKnockback knockback = collision.GetComponent<EnemyKnockback>();
             if (health != null)
             {
-                if (playerCombat != null)
+                if (playerInteractions != null)
                 {
-                    playerCombat.ShowEnemyHealth(collision.gameObject);
+                    playerInteractions.ShowEnemyHealth(collision.gameObject);
                 }
                 health.CurrentHealth -= skill.Damage;
             }
@@ -136,9 +135,9 @@ public class SkillAbillityExecutioner: MonoBehaviour
                     EnemyKnockback knockback = collider.GetComponent<EnemyKnockback>();
                     if (health != null)
                     {
-                        if (playerCombat != null)
+                        if (playerInteractions != null)
                         {
-                            playerCombat.ShowEnemyHealth(collider.gameObject);
+                            playerInteractions.ShowEnemyHealth(collider.gameObject);
                         }
                         health.CurrentHealth -= skill.Damage;
                     }

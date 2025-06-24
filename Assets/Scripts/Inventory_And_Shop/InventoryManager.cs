@@ -1,17 +1,29 @@
 using UnityEngine;
 using TMPro;
 using System;
+using System.Collections.Generic;
+
+[Serializable]
+public struct EquipmentSlots 
+{
+    [SerializeField]
+    public itemType type;
+    [SerializeField]
+    public InventorySlot itemSlots;
+}
 
 public class InventoryManager : MonoBehaviour
 {
     public InventorySlot[] itemSlots;
+    [SerializeField] private List<EquipmentSlots> equipmentSlots;
     [SerializeField] private int gold;
     [SerializeField] private TMP_Text goldText;
 
     [SerializeField] private GameObject lootPrefab;
     [SerializeField] private Transform player;
     [SerializeField] private UseItem useItem;
-
+    private CanvasGroup inventoryCanvasGroup;
+    private Dictionary<itemType, InventorySlot> equipmentDictionery;
     public int Gold
     {
         get { return gold; }
@@ -27,6 +39,14 @@ public class InventoryManager : MonoBehaviour
         {
             slot.UpdateUI();
         }
+        inventoryCanvasGroup = GetComponent<CanvasGroup>();
+
+        equipmentDictionery = new Dictionary<itemType, InventorySlot>();
+        foreach (var item in equipmentSlots)
+        {
+            item.itemSlots.UpdateUI();
+            equipmentDictionery.Add(item.type, item.itemSlots);
+        }
     }
 
     private void OnEnable()
@@ -37,6 +57,26 @@ public class InventoryManager : MonoBehaviour
     private void OnDisable()
     {
         Loot.OnItemLooted -= AddItem;
+    }
+
+    public void ToggleInventoryView()
+    {
+        ToggleInventoryView(inventoryCanvasGroup.alpha == 0);
+    }
+    public void ToggleInventoryView(bool turnOn)
+    {
+        if (turnOn)
+        {
+            Time.timeScale = 0;
+            inventoryCanvasGroup.alpha = 1;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            inventoryCanvasGroup.alpha = 0;
+        }
+        inventoryCanvasGroup.blocksRaycasts = turnOn;
+        inventoryCanvasGroup.interactable = turnOn;
     }
 
     //Adds Item to inventory
@@ -51,7 +91,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         //Search for an item in the inventory if its stackable
-        if (itemSO.IsStackable()) 
+        if (itemSO.IsStackable())
         {
             foreach (var slot in itemSlots)
             {
@@ -82,12 +122,12 @@ public class InventoryManager : MonoBehaviour
             if (slot.itemSO == null)
             {
                 int amountToAdd = 1;
-                if (itemSO.IsStackable()) 
+                if (itemSO.IsStackable())
                 {
                     amountToAdd = Mathf.Min(((ConsumableSO)itemSO).StackSize, quantity);
                     //quantity -= amountToAdd;
                 }
-                
+
                 slot.itemSO = itemSO;
                 slot.quantity = amountToAdd;
                 slot.UpdateUI();
@@ -99,7 +139,37 @@ public class InventoryManager : MonoBehaviour
             dropLoot(itemSO, quantity);
         }
     }
+    public bool InventorySlotISEquipmentSlot(InventorySlot inventorySlot) 
+    {
+        return equipmentDictionery.ContainsValue(inventorySlot);
+    }
 
+    private void addItemToEquipmentSlot(ItemAbs_SO itemSO, InventorySlot slot)
+    {
+        if (slot == null || itemSO == null)
+        {
+            return;
+        }
+        if (itemSO.IsStackable())
+        {
+            Debug.LogError("can't equip stackable item : " + itemSO);
+        }
+        slot.itemSO = itemSO;
+        slot.quantity = 1;
+        slot.UpdateUI();
+    }
+    public void removeEquipedItem(InventorySlot slot)
+    {
+        if (slot == null || slot.itemSO == null)
+        {
+            return;
+        }
+        ItemAbs_SO itemSO = slot.itemSO;
+        useItem.ApplyItemEffects(itemSO, true);
+        AddItem(itemSO, 1);
+        slot.itemSO = null;
+        slot.UpdateUI();
+    }
     public void DropItem(InventorySlot slot)
     {
         dropLoot(slot.itemSO, 1);
@@ -118,15 +188,28 @@ public class InventoryManager : MonoBehaviour
     }
     public void UseItem(InventorySlot slot)
     {
-        if (slot.itemSO != null && slot.quantity >= 0)
+        if (slot.itemSO == null || slot.quantity <= 0)
         {
-            useItem.ApplyItemEffects(slot.itemSO);
-            slot.quantity--;
-            if (slot.quantity <= 0)
-            {
-                slot.itemSO = null;
-            }
-            slot.UpdateUI();
+            return;
         }
+
+        itemType type = slot.itemSO.GetItemType();
+        if (type != itemType.Consumable)
+        {
+            equipmentDictionery.TryGetValue(type, out InventorySlot equipmentInventorySlot);
+
+            removeEquipedItem(equipmentInventorySlot);
+            addItemToEquipmentSlot(slot.itemSO, equipmentInventorySlot);
+        }
+
+        useItem.ApplyItemEffects(slot.itemSO);
+        slot.quantity--;
+        if (slot.quantity <= 0)
+        {
+            slot.itemSO = null;
+        }
+
+        slot.UpdateUI();
     }
+
 }

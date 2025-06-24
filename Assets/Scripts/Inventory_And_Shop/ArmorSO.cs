@@ -4,8 +4,11 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Armor Item", menuName = "ItemsSO/New Armor Item")]
 
-public class ArmorSO: ItemAbs_SO
+public class ArmorSO : ItemAbs_SO
 {
+    [SerializeField]
+    private itemType type;
+
     [SerializeField]
     private List<StatGen<int>> integerStats = new List<StatGen<int>>
     {
@@ -14,6 +17,12 @@ public class ArmorSO: ItemAbs_SO
         new StatGen<int> { StatType = statType.MaxHealth, Stat = 0 }
 
     };
+
+    public override itemType GetItemType()
+    {
+        return type;
+    }
+
     //Adds all the values that are diffrent from 0
     public override List<IStat> GetItemStats()
     {
@@ -53,4 +62,6 @@ public class ArmorSO: ItemAbs_SO
     {
         return false;
     }
+
 }
+

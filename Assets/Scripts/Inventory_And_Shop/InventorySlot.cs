@@ -48,8 +48,15 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler
                     }
                 }
                 else 
-                { 
-                    inventoryManager.UseItem(this);
+                {
+                    if (inventoryManager.InventorySlotISEquipmentSlot(this))
+                    {
+                        inventoryManager.removeEquipedItem(this);
+                    }
+                    else
+                    {
+                        inventoryManager.UseItem(this);
+                    }
                 }             
             }
             else if (eventData.button == PointerEventData.InputButton.Right) 

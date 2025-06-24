@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour
 
     [SerializeField] private float DashPower;
     [SerializeField] private float ComboCooldown;
+    [SerializeField] private InventoryManager inventoryManager;
 
     private HitInputLogic hitInputLogic;
     private PlayerMovement playerMovement;
@@ -140,6 +141,15 @@ public class PlayerInput : MonoBehaviour
         checkForCharecterChange();
         checkIfPlayerShoot();
         checkIfPlayerCastSkill();
+        checkIfPanelOpened();
+
+    }
+    private void checkIfPanelOpened() 
+    {
+        if (Input.GetButtonDown("OpenInventory"))
+        {
+            inventoryManager.ToggleInventoryView();
+        }
     }
     private void checkForCharecterChange()
     {
@@ -151,7 +161,7 @@ public class PlayerInput : MonoBehaviour
     }
     private void checkIfPlayerShoot()
     {
-        if (Input.GetButtonDown("Fire1") && playerBow.enabled)
+        if (Input.GetButtonDown("Fire2") && playerBow.enabled)
         {
             playerBow.Shoot();
         }

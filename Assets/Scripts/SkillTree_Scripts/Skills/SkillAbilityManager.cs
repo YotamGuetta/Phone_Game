@@ -14,7 +14,7 @@ public class SkillAbilityManager : MonoBehaviour
     [SerializeField] private SkillsDictionary typeToSkill;
     [SerializeField] private Vector3 direction = Vector3.right;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private PlayerCombat playerCombat;
+    private PlayerInteractions playerInteractions;
     public GameObject skillExecutioner;
 
     private float skillTimer = 0;
@@ -24,6 +24,7 @@ public class SkillAbilityManager : MonoBehaviour
 
     private void Start()
     {
+        playerInteractions = GetComponentInParent<PlayerInteractions>();
         unitController = GetComponentInParent<UnitController>();
         skillsToTypeDictionary = InitializeDictionary();
     }
@@ -34,7 +35,7 @@ public class SkillAbilityManager : MonoBehaviour
         foreach (var item in typeToSkill.skillsItems)
         {
             SkillAbillityExecutioner skillAbillityExecutioner = Instantiate(skillExecutioner,transform).GetComponent<SkillAbillityExecutioner>();
-            skillAbillityExecutioner.Initialize(item.skillAbilitySO, unitController, enemyLayer, playerCombat);
+            skillAbillityExecutioner.Initialize(item.skillAbilitySO, unitController, enemyLayer, playerInteractions);
             skillsDictionaryItems.Add(item.type, skillAbillityExecutioner);
         }
 

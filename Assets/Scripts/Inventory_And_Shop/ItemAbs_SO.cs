@@ -15,4 +15,20 @@ public abstract class ItemAbs_SO : ScriptableObject
     public Sprite ItemIcon { get { return itemIcon; } }
     public string ItemDescription { get { return itemDescription; } }
     public bool IsGold { get { return this.GetType().Name == "GoldSO"; } }
+    public virtual itemType GetItemType()
+    {
+        if (this is WeaponSO)
+        {
+            return itemType.Weapon;
+        }
+        return itemType.Consumable;
+    }
+}
+public enum itemType
+{
+    Helmet,
+    BodyArmor,
+    Boots,
+    Weapon,
+    Consumable
 }

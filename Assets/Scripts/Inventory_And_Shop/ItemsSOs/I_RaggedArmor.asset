@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Ragged Armor
   itemDescription: its a Ragged Armor
   itemIcon: {fileID: 2960402581040015946, guid: 9befabd1ab9ab03418a58e9b4b472473, type: 3}
+  type: 1
   integerStats:
   - StatType: 2
     Stat: 0

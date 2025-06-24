@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class UseItem : MonoBehaviour
 {
-    
+    public void ApplyItemEffects(ItemAbs_SO itemSO, bool reverse)
+    {
+        if (reverse)
+        {
+            foreach (var stat in itemSO.GetItemStats())
+            {
+                updateStats(stat, -1);
+            }
+        }
+        else 
+        {
+            ApplyItemEffects(itemSO);
+        }
+    }
     public void ApplyItemEffects(ItemAbs_SO itemSO)
     {
         foreach (var stat in itemSO.GetItemStats())

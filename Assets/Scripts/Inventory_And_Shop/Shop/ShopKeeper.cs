@@ -18,6 +18,7 @@ public class ShopKeeper : MonoBehaviour
 
     [SerializeField] private Camera shopKeeperCam;
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 0, -1);
+    [SerializeField] private InventoryManager inventoryManager;
 
     private bool playerInRange;
     private bool isShopOpen = false;
@@ -36,7 +37,9 @@ public class ShopKeeper : MonoBehaviour
                 shopCanvasGroup.interactable = isShopOpen;
 
                 OnShopStateChanged?.Invoke(shopManager, isShopOpen);
-                
+
+                inventoryManager.ToggleInventoryView(isShopOpen);
+
                 if (isShopOpen)
                 {
                     currentShopkeeper = this;
