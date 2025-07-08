@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
  
 
@@ -140,7 +141,7 @@ public class PlayerInput : MonoBehaviour
     {
         checkForCharecterChange();
         checkIfPlayerShoot();
-        checkIfPlayerCastSkill();
+        checkIfPlayerPaused();
         checkIfPanelOpened();
 
     }
@@ -166,11 +167,11 @@ public class PlayerInput : MonoBehaviour
             playerBow.Shoot();
         }
     }
-    private void checkIfPlayerCastSkill()
+    private void checkIfPlayerPaused()
     {
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Cancel"))
         {
-            //skillAbilityManager.ActivateSkill();
+            SceneManager.LoadScene(sceneName: "MainMenu");
         }
     }
 }

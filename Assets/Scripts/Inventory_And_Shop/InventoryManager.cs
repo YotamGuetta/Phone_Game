@@ -35,12 +35,14 @@ public class InventoryManager : MonoBehaviour
     }
     private void Start()
     {
+        //updates the inventory UI
         foreach (var slot in itemSlots)
         {
             slot.UpdateUI();
         }
         inventoryCanvasGroup = GetComponent<CanvasGroup>();
 
+        //Saves the player Equipment slots in a dictionary to avoid duplicates
         equipmentDictionery = new Dictionary<itemType, InventorySlot>();
         foreach (var item in equipmentSlots)
         {
@@ -99,9 +101,11 @@ public class InventoryManager : MonoBehaviour
                 {
                     if (slot.itemSO is ConsumableSO consumableItem && slot.quantity < consumableItem.StackSize)
                     {
-                        int availableSpace = consumableItem.StackSize - slot.quantity;
+                        //Prevent the stack from overflowing
+                        int availableSpace = consumableItem.StackSize - slot.quantity;                       
                         int amountToAdd = Mathf.Min(availableSpace, quantity);
 
+                        //Adds the quantity from the item stack
                         slot.quantity += amountToAdd;
                         quantity -= amountToAdd;
 
@@ -165,6 +169,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         ItemAbs_SO itemSO = slot.itemSO;
+        //Removes the stats the previous item equiped gave 
         useItem.ApplyItemEffects(itemSO, true);
         AddItem(itemSO, 1);
         slot.itemSO = null;
@@ -183,6 +188,7 @@ public class InventoryManager : MonoBehaviour
 
     private void dropLoot(ItemAbs_SO itemSO, int quantity)
     {
+        //Makes a ground loot instance at the player possition
         Loot loot = Instantiate(lootPrefab, player.position, Quaternion.identity).GetComponent<Loot>();
         loot.Initialize(itemSO, quantity);
     }
@@ -194,6 +200,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         itemType type = slot.itemSO.GetItemType();
+        //If the item is an equipable, replace it with the one tha player is using
         if (type != itemType.Consumable)
         {
             equipmentDictionery.TryGetValue(type, out InventorySlot equipmentInventorySlot);
@@ -202,7 +209,7 @@ public class InventoryManager : MonoBehaviour
             addItemToEquipmentSlot(slot.itemSO, equipmentInventorySlot);
         }
 
-        useItem.ApplyItemEffects(slot.itemSO);
+        useItem.ApplyItemEffects(slot.itemSO, false);
         slot.quantity--;
         if (slot.quantity <= 0)
         {

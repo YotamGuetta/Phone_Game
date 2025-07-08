@@ -10,6 +10,7 @@ public class ShopManager : MonoBehaviour
 
     [SerializeField] private float itemSellMultiplier = 0.5f;
 
+    //Updates the shop when the player toggles between shop types
     public void PopulateShopItems(List<ShopItems> shopItems)
     {
         for (int i = 0; i < shopItems.Count && i < shopSlots.Length; i++)
@@ -62,6 +63,7 @@ public class ShopManager : MonoBehaviour
         }
         foreach (var slot in shopSlots)
         {
+            //if the shopkeeper owns the items he sells it for a redused price
             if (slot.SlotItemSO == itemSO)
             {
                 inventoryManager.Gold += Mathf.RoundToInt(slot.Price * itemSellMultiplier);

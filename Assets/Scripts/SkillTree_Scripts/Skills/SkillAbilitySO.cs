@@ -13,12 +13,12 @@ public class SkillAbilitySO : ScriptableObject
     [SerializeField] private int segments = 10;
     [SerializeField] private Sprite skillIcon;
     [SerializeField] private AnimationClip animation;
-    [SerializeField] private float skillCooldown =1 ;
+    [SerializeField] private float skillCooldown = 1;
     [SerializeField] private float knockbackForce;
     [SerializeField] private float knockbackDuration;
     [SerializeField] private float stunTime;
     public float Size { get { return size; } }
-    public float Range { get { return range; }}
+    public float Range { get { return range; } }
     public int Damage { get { return damage; } }
     public shape AreaShape { get { return areaShape; } }
     public float Angle { get { return angle; } }
@@ -28,11 +28,11 @@ public class SkillAbilitySO : ScriptableObject
     public float KnockbackForce { get { return knockbackForce; } }
     public float KnockbackDuration { get { return knockbackDuration; } }
     public float StunTime { get { return stunTime; } }
-    public void skillEnded() 
+    public void skillEnded()
     {
-       
+
     }
-    public void CreateConeColliderForSkill(GameObject obj) 
+    public void CreateConeColliderForSkill(GameObject obj)
     {
         CreateConeCollider(obj, size, angle, segments);
     }
@@ -42,7 +42,7 @@ public class SkillAbilitySO : ScriptableObject
         obj.transform.rotation = rotation;
         obj.transform.position = possition;
     }
-        public void CreateConeCollider(GameObject obj, float radius, float angle, int segments)
+    public void CreateConeCollider(GameObject obj, float radius, float angle, int segments)
     {
         PolygonCollider2D poly = obj.AddComponent<PolygonCollider2D>();
 

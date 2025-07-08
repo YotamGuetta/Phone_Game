@@ -29,7 +29,7 @@ public class ShopKeeper : MonoBehaviour
         {
             if (Input.GetButtonDown("Interact") || (isShopOpen && Input.GetButtonDown("Cancel")))
             {
-
+                //toggle the shop menu off/on and freezes the game accordingly
                 Time.timeScale = shopCanvasGroup.alpha;
                 shopCanvasGroup.alpha = (shopCanvasGroup.alpha - 1) * (-1);
                 isShopOpen = shopCanvasGroup.alpha == 1;
@@ -38,8 +38,10 @@ public class ShopKeeper : MonoBehaviour
 
                 OnShopStateChanged?.Invoke(shopManager, isShopOpen);
 
+                //toggle the player inventory menu off/on
                 inventoryManager.ToggleInventoryView(isShopOpen);
 
+                //sets the correct shopkepper to display
                 if (isShopOpen)
                 {
                     currentShopkeeper = this;
