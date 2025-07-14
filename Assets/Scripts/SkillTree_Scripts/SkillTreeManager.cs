@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class SkillTreeManager : MonoBehaviour
+public class SkillTreeManager : UIPanel
 {
     [SerializeField] private SkillSlot[] skillSlots;
     [SerializeField] private TMP_Text pointsText;

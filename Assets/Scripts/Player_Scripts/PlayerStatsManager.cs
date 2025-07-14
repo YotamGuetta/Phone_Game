@@ -9,7 +9,7 @@ public class PlayerStatsManager : MonoBehaviour
 
     public static PlayerStatsManager Instance;
 
-    public UIStats uIStats;
+    public StatsPanelManager uIStats;
 
     [Header("Combat Stats")]
     public float weaponRange = 0.7f;

@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
- 
+using System;
 
 public class PlayerInput : MonoBehaviour
 {
-    
 
     [SerializeField] private float DashPower;
     [SerializeField] private float ComboCooldown;
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private SkillTreeManager skillTreeManager;
+    [SerializeField] private StatsPanelManager statsPanelManager;
+    private ShopKeeper shopKeeper;
+
 
     private HitInputLogic hitInputLogic;
     private PlayerMovement playerMovement;
@@ -18,6 +21,16 @@ public class PlayerInput : MonoBehaviour
     private SkillAbilityManager skillAbilityManager;
     private List<eightDirection> inputsQueue;
     private float CurrentCommboCountdown = 0;
+
+    private bool DisablePanels = false;
+    private UIPanel openedLeftPanel = null;
+    private UIPanel openedRightPanel = null;
+
+    enum panelSide
+    {
+        Left,
+        Right
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -43,6 +56,16 @@ public class PlayerInput : MonoBehaviour
     {
         Debug.Log("player Hold : " + output);
     }
+
+    /// <summary>
+    /// Updates the shopkeeper that is in range. If there isn't one enter null.
+    /// </summary>
+    /// <param name="closeShopKeeper"> The shopkeeper who is in range</param>
+    public void AddShopKeeperInRangeToPlayer(ShopKeeper closeShopKeeper)
+    {
+        shopKeeper = closeShopKeeper;
+    }
+
     public void CheckForAttackInputs()
     {
         checkCombatInput();
@@ -142,15 +165,124 @@ public class PlayerInput : MonoBehaviour
         checkForCharecterChange();
         checkIfPlayerShoot();
         checkIfPlayerPaused();
+        checkIfShopOpened();
         checkIfPanelOpened();
 
     }
-    private void checkIfPanelOpened() 
+    private void checkIfShopOpened() 
     {
+        if (shopKeeper == null) 
+        {
+            return;
+        }
+        if (Input.GetButtonDown("Interact"))
+        {
+            closeRightPanel();
+            shopKeeper.ToggleShopPanel();
+        }
+        if (Input.GetButtonDown("Cancel"))
+        {
+            shopKeeper.CloseShopPanel();
+        }
+        DisablePanels = shopKeeper.IsShopOpen;
+    }
+    private void checkIfPanelOpened()
+    {
+        panelSide side;
+        if (DisablePanels) 
+        {
+            return;
+        }
+
+        //Left Panels
+        side = panelSide.Left;
         if (Input.GetButtonDown("OpenInventory"))
         {
-            inventoryManager.ToggleInventoryView();
+            togglePanel(inventoryManager, side);
         }
+
+        //Right Panels
+        side = panelSide.Right;
+        if (Input.GetButtonDown("ToggleSkills")) 
+        {
+            togglePanel(skillTreeManager, side);
+        }
+        if (Input.GetButtonDown("ToggleStats"))
+        {
+            togglePanel(statsPanelManager, side);
+        }
+    }
+    /// <summary>
+    /// Toggle between show and hide panel
+    /// </summary>
+    /// <param name="panel">The panel</param>
+    /// <param name="side">The side of the panel in the UI</param>
+    private void togglePanel(UIPanel panel, panelSide side) 
+    {
+        if (side == panelSide.Left)
+        {
+            //Closes a pannel on the left side of the UI if there is an open one.
+            if (!panel.IsPanelOpen())
+            {
+                closeLeftPanel();
+            }
+
+            //Toggle the Panel off/on.
+            panel.TogglePanel();
+
+            //Set as the active panel on the left.
+            if (panel.IsPanelOpen())
+            {
+                openedLeftPanel = panel;
+            }
+        }
+        else 
+        {
+            //Closes a pannel on the right side of the UI if there is an open one.
+            if (!panel.IsPanelOpen())
+            {
+                closeRightPanel();
+            }
+
+            //Toggle the Panel off/on.
+            panel.TogglePanel();
+
+            //Set as the active panel on the right.
+            if (panel.IsPanelOpen())
+            {
+                openedRightPanel = panel;
+            }
+        }
+    }
+    private bool closeLeftPanel() 
+    {
+        bool wasAPanelClosed = false;
+        if (openedLeftPanel != null && openedLeftPanel.IsPanelOpen())
+        {
+            openedLeftPanel.TogglePanel();
+            wasAPanelClosed = true;
+        }
+        openedLeftPanel = null;
+        return wasAPanelClosed;
+    }
+    private bool closeRightPanel()
+    {
+        bool wasAPanelClosed = false;
+        if (openedRightPanel != null && openedRightPanel.IsPanelOpen())
+        {
+            openedRightPanel.TogglePanel();
+            wasAPanelClosed =  true;
+        }
+        openedRightPanel = null;
+        return wasAPanelClosed;
+    }
+    /// <summary>
+    /// searchs if panels in the UI are open and closes them.
+    /// </summary>
+    /// <returns>If panels were found and closed</returns>
+    private bool closeAPanelIfPossible() 
+    {
+        return closeLeftPanel() || closeRightPanel();
     }
     private void checkForCharecterChange()
     {
@@ -171,7 +303,11 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         {
-            SceneManager.LoadScene(sceneName: "MainMenu");
+            //Closes Open panels if there are ones, else opens the menu.
+            if (!closeAPanelIfPossible() && !DisablePanels)
+            {
+                SceneManager.LoadScene(sceneName: "MainMenu");
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ public struct EquipmentSlots
     public InventorySlot itemSlots;
 }
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : UIPanel
 {
     public InventorySlot[] itemSlots;
     [SerializeField] private List<EquipmentSlots> equipmentSlots;
@@ -22,7 +22,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject lootPrefab;
     [SerializeField] private Transform player;
     [SerializeField] private UseItem useItem;
-    private CanvasGroup inventoryCanvasGroup;
     private Dictionary<itemType, InventorySlot> equipmentDictionery;
     public int Gold
     {
@@ -40,7 +39,6 @@ public class InventoryManager : MonoBehaviour
         {
             slot.UpdateUI();
         }
-        inventoryCanvasGroup = GetComponent<CanvasGroup>();
 
         //Saves the player Equipment slots in a dictionary to avoid duplicates
         equipmentDictionery = new Dictionary<itemType, InventorySlot>();
@@ -61,24 +59,17 @@ public class InventoryManager : MonoBehaviour
         Loot.OnItemLooted -= AddItem;
     }
 
-    public void ToggleInventoryView()
-    {
-        ToggleInventoryView(inventoryCanvasGroup.alpha == 0);
-    }
+    // Turns the inventory panel off/on based on the bool given
     public void ToggleInventoryView(bool turnOn)
     {
-        if (turnOn)
+        if (turnOn && !IsPanelOpen())
         {
-            Time.timeScale = 0;
-            inventoryCanvasGroup.alpha = 1;
+            TogglePanel();
         }
-        else
+        else if (!turnOn && IsPanelOpen())
         {
-            Time.timeScale = 1;
-            inventoryCanvasGroup.alpha = 0;
+            TogglePanel();
         }
-        inventoryCanvasGroup.blocksRaycasts = turnOn;
-        inventoryCanvasGroup.interactable = turnOn;
     }
 
     //Adds Item to inventory

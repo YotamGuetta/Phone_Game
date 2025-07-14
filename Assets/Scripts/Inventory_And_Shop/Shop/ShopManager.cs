@@ -10,6 +10,7 @@ public class ShopManager : MonoBehaviour
 
     [SerializeField] private float itemSellMultiplier = 0.5f;
 
+
     //Updates the shop when the player toggles between shop types
     public void PopulateShopItems(List<ShopItems> shopItems)
     {

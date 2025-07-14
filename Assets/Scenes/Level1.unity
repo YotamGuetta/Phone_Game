@@ -1170,6 +1170,7 @@ GameObject:
   - component: {fileID: 140371268}
   - component: {fileID: 140371267}
   - component: {fileID: 140371269}
+  - component: {fileID: 140371270}
   m_Layer: 5
   m_Name: StatsPanel
   m_TagString: Untagged
@@ -1248,6 +1249,30 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &140371270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140371265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6a9441d65eec34e8b8dc11b7fd1647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 0}
+  statsSlots:
+  - {fileID: 1712221686}
+  - {fileID: 2093588363}
+  - {fileID: 1632287093}
+  - {fileID: 1908396007}
+  - {fileID: 1300167969}
+  - {fileID: 1352891487}
+  - {fileID: 1542363848}
+  - {fileID: 372472085}
+  - {fileID: 645675034}
+  - {fileID: 2133798171}
 --- !u!1001 &162109831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2797,7 +2822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bcfc0028b3ef0043ae7c974c02d9c63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uIStats: {fileID: 1715594317}
+  uIStats: {fileID: 0}
   weaponRange: 1.2
   damage: 2
   attackCooldown: 1
@@ -3041,6 +3066,7 @@ MonoBehaviour:
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}
   inventoryManager: {fileID: 476424541}
+  playerInput: {fileID: 737787725276570235}
 --- !u!212 &347110336
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4312,7 +4338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -38, y: 7.3}
+  m_AnchoredPosition: {x: -80, y: 7.3}
   m_SizeDelta: {x: 1200, y: 1200}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!225 &476424538
@@ -4377,6 +4403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fcf94629bcca044889eec79c23f3b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 0}
   itemSlots:
   - {fileID: 293103904}
   - {fileID: 1962214438}
@@ -7022,6 +7049,7 @@ MonoBehaviour:
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}
   inventoryManager: {fileID: 476424541}
+  playerInput: {fileID: 737787725276570235}
 --- !u!212 &611779840
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11166,7 +11194,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 359, y: -111}
+  m_AnchoredPosition: {x: 450, y: 0}
   m_SizeDelta: {x: 1300, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &986668965
@@ -12024,7 +12052,6 @@ GameObject:
   - component: {fileID: 1125119632}
   - component: {fileID: 1125119633}
   - component: {fileID: 1125119634}
-  - component: {fileID: 1125119635}
   m_Layer: 5
   m_Name: SkillsPanel
   m_TagString: Untagged
@@ -12117,6 +12144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f924573e8a572984781f7e37a7936576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 0}
   skillSlots:
   - {fileID: 281729320336422684}
   - {fileID: 1690506598}
@@ -12156,19 +12184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edcc42d4f89be2c489d3c1c17d07364b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1125119635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125119628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a3f9f6df49bb54a92d9457ef4b2e2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 1125119632}
 --- !u!224 &1146796371 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7290750095512573478, guid: 1f7b7b3462915b94cb3dede294c33d88, type: 3}
@@ -29447,6 +29462,7 @@ MonoBehaviour:
   shopKeeperCam: {fileID: 1299820846}
   cameraOffset: {x: 0, y: 0, z: -1}
   inventoryManager: {fileID: 476424541}
+  playerInput: {fileID: 737787725276570235}
 --- !u!212 &1374640850
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -32908,7 +32924,6 @@ GameObject:
   - component: {fileID: 1715594315}
   - component: {fileID: 1715594314}
   - component: {fileID: 1715594316}
-  - component: {fileID: 1715594317}
   m_Layer: 5
   m_Name: TextPanel
   m_TagString: Untagged
@@ -33007,30 +33022,6 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &1715594317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1715594312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45b924e0a56019444a0a5ab856b36d23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statsSlots:
-  - {fileID: 1712221686}
-  - {fileID: 2093588363}
-  - {fileID: 1632287093}
-  - {fileID: 1908396007}
-  - {fileID: 1300167969}
-  - {fileID: 1352891487}
-  - {fileID: 1542363848}
-  - {fileID: 372472085}
-  - {fileID: 645675034}
-  - {fileID: 2133798171}
-  canvasGroup: {fileID: 140371269}
 --- !u!1 &1738595543
 GameObject:
   m_ObjectHideFlags: 0
@@ -36941,6 +36932,14 @@ PrefabInstance:
       propertyPath: inventoryManager
       value: 
       objectReference: {fileID: 476424541}
+    - target: {fileID: 2248006800094389069, guid: a35f7a10f9ab9f34ca4a5c3ef61650e0, type: 3}
+      propertyPath: skillTreeManager
+      value: 
+      objectReference: {fileID: 1125119633}
+    - target: {fileID: 2248006800094389069, guid: a35f7a10f9ab9f34ca4a5c3ef61650e0, type: 3}
+      propertyPath: statsPanelManager
+      value: 
+      objectReference: {fileID: 140371270}
     - target: {fileID: 2248006800094389069, guid: a35f7a10f9ab9f34ca4a5c3ef61650e0, type: 3}
       propertyPath: inventoryCanvasGroup
       value: 

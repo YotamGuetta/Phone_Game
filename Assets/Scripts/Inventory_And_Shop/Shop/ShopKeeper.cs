@@ -19,43 +19,42 @@ public class ShopKeeper : MonoBehaviour
     [SerializeField] private Camera shopKeeperCam;
     [SerializeField] private Vector3 cameraOffset = new Vector3(0, 0, -1);
     [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private PlayerInput playerInput;
 
-    private bool playerInRange;
-    private bool isShopOpen = false;
+    public bool IsShopOpen { get; private set; }
 
-    private void Update()
+    public void ToggleShopPanel() 
     {
-        if (playerInRange) 
+        //toggle the shop menu off/on and freezes the game accordingly
+        Time.timeScale = shopCanvasGroup.alpha;
+        MainMenu.ToggleCanvasGroup(shopCanvasGroup);
+        IsShopOpen = shopCanvasGroup.alpha == 1;
+
+        OnShopStateChanged?.Invoke(shopManager, IsShopOpen);
+
+        //toggle the player inventory menu off/on
+        inventoryManager.ToggleInventoryView(IsShopOpen);
+
+        //sets the correct shopkepper to display
+        if (IsShopOpen)
         {
-            if (Input.GetButtonDown("Interact") || (isShopOpen && Input.GetButtonDown("Cancel")))
-            {
-                //toggle the shop menu off/on and freezes the game accordingly
-                Time.timeScale = shopCanvasGroup.alpha;
-                shopCanvasGroup.alpha = (shopCanvasGroup.alpha - 1) * (-1);
-                isShopOpen = shopCanvasGroup.alpha == 1;
-                shopCanvasGroup.blocksRaycasts = isShopOpen;
-                shopCanvasGroup.interactable = isShopOpen;
+            currentShopkeeper = this;
+            shopKeeperCam.transform.position = transform.position + cameraOffset;
+        }
+        else
+        {
+            currentShopkeeper = null;
+        }
 
-                OnShopStateChanged?.Invoke(shopManager, isShopOpen);
+        shopKeeperCam.gameObject.SetActive(IsShopOpen);
 
-                //toggle the player inventory menu off/on
-                inventoryManager.ToggleInventoryView(isShopOpen);
-
-                //sets the correct shopkepper to display
-                if (isShopOpen)
-                {
-                    currentShopkeeper = this;
-                    shopKeeperCam.transform.position = transform.position + cameraOffset;
-                }
-                else
-                {
-                    currentShopkeeper = null;
-                }
-
-                shopKeeperCam.gameObject.SetActive(isShopOpen);
-
-                    OpenItemShop();
-            }
+        OpenItemShop();
+    }
+    public void CloseShopPanel()
+    {
+        if (IsShopOpen) 
+        {
+            ToggleShopPanel();
         }
     }
 
@@ -74,21 +73,21 @@ public class ShopKeeper : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // did player enter shopkeeper's range
         if (collision.CompareTag("Player"))
         {
             anim.SetBool("PlayerInRange", true);
-            playerInRange = true;
-
+            playerInput.AddShopKeeperInRangeToPlayer(this);
         }
 
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        // did player exit shopkeeper's range
         if (collision.CompareTag("Player"))
         {
             anim.SetBool("PlayerInRange", false);
-            playerInRange = false;
-
+            playerInput.AddShopKeeperInRangeToPlayer(null);
         }
 
     }
