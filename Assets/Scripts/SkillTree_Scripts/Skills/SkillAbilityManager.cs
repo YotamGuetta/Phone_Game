@@ -32,6 +32,13 @@ public class SkillAbilityManager : MonoBehaviour
     {
         Dictionary<skillType, SkillAbillityExecutioner> skillsDictionaryItems = new Dictionary<skillType, SkillAbillityExecutioner>();
 
+        //Destroy exsisting skills
+        foreach (Transform ChildTransform in this.transform)
+        {
+                Destroy(ChildTransform.gameObject);
+        }
+
+        //create all skills and add them to the dictionary
         foreach (var item in typeToSkill.skillsItems)
         {
             SkillAbillityExecutioner skillAbillityExecutioner = Instantiate(skillExecutioner,transform).GetComponent<SkillAbillityExecutioner>();

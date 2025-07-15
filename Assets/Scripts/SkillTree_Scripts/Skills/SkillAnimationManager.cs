@@ -8,16 +8,18 @@ public class SkillAnimationManager : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();  
     }
 
     public void StartAnimation(string animationName)
     {
         spriteRenderer.enabled = true;
         animator.Play(animationName, 0, 0f);
+        animator.speed = PlayerStatsManager.Instance.SkillSpeed;
     }
     public void EndAnimation()
     {

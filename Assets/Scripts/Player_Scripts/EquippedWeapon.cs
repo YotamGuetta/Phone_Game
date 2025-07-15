@@ -15,7 +15,7 @@ public class EquippedWeapon : MonoBehaviour
     private void OnDisable()
     {
         SkillAbilityManager.SkillActivated -= hideWeapon;
-        SkillAbilityManager.SkillFinished += showWeapon;
+        SkillAbilityManager.SkillFinished -= showWeapon;
     }
     private void showWeapon() 
     {

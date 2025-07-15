@@ -1,0 +1,45 @@
+.Lable {
+    -unity-text-align: upper-center;
+    font-size: 18px;
+    -unity-text-outline-width: 1px;
+    -unity-font-style: bold;
+}
+
+.VisualElement {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+    padding-left: 0;
+}
+
+.Button {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: relative;
+    -unity-font-style: bold;
+    align-self: center;
+    align-items: stretch;
+    padding-top: 0;
+    margin-top: 10px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.section {
+    background-color: var(--unity-colors-default-background);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}

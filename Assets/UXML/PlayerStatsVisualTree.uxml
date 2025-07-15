@@ -1,0 +1,51 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/UXML/PlayerStatsStyle.uss?fileID=7433441132597879392&amp;guid=92d3774a47a66d843b16625721605f9b&amp;type=3#PlayerStatsStyle" />
+    <engine:VisualElement name="Dependency" class="VisualElement" style="flex-grow: 1; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+        <engine:VisualElement name="Title" class="section" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: upper-center; font-size: 18px; -unity-text-outline-width: 1px; letter-spacing: 2px; color: rgb(203, 203, 203);">
+            <engine:Label text="Dependencies" name="Title" class="Lable" style="color: rgb(119, 111, 205);" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Vars" class="section" style="flex-grow: 1;">
+            <editor:PropertyField binding-path="uIStats" />
+            <editor:PropertyField binding-path="attackPoint" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="CombatStats" class="VisualElement" style="flex-grow: 1;">
+        <engine:VisualElement name="Title" class="section" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: upper-center; font-size: 18px; -unity-text-outline-width: 1px; letter-spacing: 2px; color: rgb(203, 203, 203);">
+            <engine:Label text="Combat Stats" name="Title" class="Lable" style="color: rgb(217, 149, 89);" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Vars" class="section" style="flex-grow: 1;">
+            <editor:PropertyField binding-path="weaponRange" />
+            <engine:Slider label="&#x9;" value="42" high-value="5" binding-path="weaponRange" />
+            <editor:PropertyField binding-path="damage" />
+            <editor:PropertyField binding-path="attackCooldown" />
+            <editor:PropertyField binding-path="KnockbackDuration" />
+            <editor:PropertyField binding-path="stunTime" />
+            <editor:PropertyField binding-path="knockbackForce" />
+            <editor:PropertyField binding-path="SkillSpeed" />
+            <engine:Button text="Reset Values" name="CombatDefultValues" class="Button" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="MovmentStats" class="VisualElement" style="flex-grow: 1;">
+        <engine:VisualElement name="Title" class="section" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: upper-center; font-size: 18px; -unity-text-outline-width: 1px; letter-spacing: 2px; color: rgb(203, 203, 203);">
+            <engine:Label text="Movement Stats" name="Title" class="Lable" style="color: rgb(156, 203, 87);" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Vars" class="section" style="flex-grow: 1;">
+            <editor:PropertyField binding-path="movementSpeed" />
+            <editor:PropertyField binding-path="aimingMovmentPenelty" />
+            <engine:Button text="Reset Values" name="MovementDefultValues" class="Button" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="HealthStats" class="VisualElement" style="flex-grow: 1;">
+        <engine:VisualElement name="Title" class="section" style="flex-grow: 1; -unity-font-style: bold; -unity-text-align: upper-center; font-size: 18px; -unity-text-outline-width: 1px; letter-spacing: 2px; color: rgb(203, 203, 203);">
+            <engine:Label text="Health Stats&#10;" name="Title" class="Lable" style="color: rgb(79, 207, 110);" />
+        </engine:VisualElement>
+        <engine:VisualElement name="Vars" class="section" style="flex-grow: 1;">
+            <editor:PropertyField binding-path="maxHealth" name="MaxHealthProperty" />
+            <editor:PropertyField binding-path="currentHealth" name="CurrentHealthProperty" />
+            <engine:VisualElement style="flex-grow: 1; flex-direction: row;">
+                <engine:Toggle label="Dynamic Health" binding-path="activateDynamicHealth" style="width: 165px;" />
+                <engine:Button text="Reset Values" name="HealthDefultValues" class="Button" style="align-self: center; justify-content: flex-start; margin-top: 2px;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>
