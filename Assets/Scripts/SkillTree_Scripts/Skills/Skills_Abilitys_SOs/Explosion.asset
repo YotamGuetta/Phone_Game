@@ -20,7 +20,7 @@ MonoBehaviour:
   segments: 10
   skillIcon: {fileID: 6920829028273540874, guid: 8b1ced9e85624574eb49aab0a729ed7b, type: 3}
   animation: {fileID: 7400000, guid: d89c7ad88439e574ea60f57120d405ef, type: 2}
-  skillCooldown: 1
+  skillCooldown: 5
   knockbackForce: 5
   knockbackDuration: 0.4
   stunTime: 0.3

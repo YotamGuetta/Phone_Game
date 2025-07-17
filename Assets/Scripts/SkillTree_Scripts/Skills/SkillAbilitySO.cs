@@ -28,6 +28,7 @@ public class SkillAbilitySO : ScriptableObject
     public float KnockbackForce { get { return knockbackForce; } }
     public float KnockbackDuration { get { return knockbackDuration; } }
     public float StunTime { get { return stunTime; } }
+    public Sprite SkillIcon { get { return skillIcon; } }
     public void skillEnded()
     {
 

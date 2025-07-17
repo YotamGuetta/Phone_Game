@@ -9,12 +9,13 @@ public class EquippedWeapon : MonoBehaviour
     }
     private void OnEnable()
     {
-        SkillAbilityManager.SkillActivated += hideWeapon;
+        // Ignores parameter
+        SkillAbilityManager.SkillActivated += (skillType _) => hideWeapon();
         SkillAbilityManager.SkillFinished += showWeapon;
     }
     private void OnDisable()
     {
-        SkillAbilityManager.SkillActivated -= hideWeapon;
+        SkillAbilityManager.SkillActivated -= (skillType _) => hideWeapon();
         SkillAbilityManager.SkillFinished -= showWeapon;
     }
     private void showWeapon() 

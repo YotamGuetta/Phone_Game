@@ -20,7 +20,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
     {
         skill = skillAbilitySO;
         this.unitController = unitController;
-        SkillAnimationManager.OnAnimationEnded += endSkill;
+        //SkillAnimationManager.OnAnimationEnded += endSkill;
         this.enemyLayer = enemyLayer;
         this.playerInteractions = playerInteractions;
     }
@@ -149,6 +149,16 @@ public class SkillAbillityExecutioner: MonoBehaviour
             }
         }
     }
+
+    public float GetSkillCooldown() 
+    {
+        return skill.SkillCooldown;
+    }
+    public Sprite GetSkillIcon()
+    {
+        return skill.SkillIcon;
+    }
+
     //For visual presentation in unity
     private void OnDrawGizmosSelected()
     {

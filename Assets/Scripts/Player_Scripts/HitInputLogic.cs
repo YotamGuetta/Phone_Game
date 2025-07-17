@@ -55,8 +55,6 @@ public class HitInputLogic : MonoBehaviour
         eightDirection eDirection;
         inputsQueue = newInputsQueue;
 
-        Debug.Log("Checking hit input");
-
         //Check every input string possibility for the input
         if ((eDirection = checkJab()) == eightDirection.center)
             if ((eDirection = checkFullCircle()) == eightDirection.center)
@@ -64,7 +62,7 @@ public class HitInputLogic : MonoBehaviour
                     if ((eDirection = checkReverseHalfCircle()) == eightDirection.center)
                         if ((eDirection = checkArc()) == eightDirection.center)
                             if ((eDirection = checkReverseArc()) == eightDirection.center)
-                                Debug.Log("is jibrish");
+                                Debug.Log("Input is jibrish");
                             else
                                 skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
                         else
@@ -88,7 +86,7 @@ public class HitInputLogic : MonoBehaviour
     {
         if (inputsQueue.Count == 1)
         {
-            Debug.Log("is jab");
+            Debug.Log("Input is jab");
             return inputsQueue[0];
         }
         return eightDirection.center;
@@ -117,7 +115,7 @@ public class HitInputLogic : MonoBehaviour
             eDirectionPrev = eDirectionNext;
         }
 
-        Debug.Log($"is {patternName}");
+        Debug.Log($"Input is {patternName}");
 
         // Optionally return center/middle element as the result
         return inputsQueue[length / 2];

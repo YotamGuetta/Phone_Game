@@ -30,12 +30,14 @@ public class PlayerMovement : UnitController
     }
     private void OnEnable()
     {
-        SkillAbilityManager.SkillActivated += skillActivated;
+        // Ignores parameter
+        SkillAbilityManager.SkillActivated += (skillType _) => skillActivated();
         SkillAbilityManager.SkillFinished += skillFinished;
     }
     private void OnDisable()
     {
-        SkillAbilityManager.SkillActivated -= skillActivated;
+        // Ignores parameter
+        SkillAbilityManager.SkillActivated -= (skillType _) => skillActivated();
         SkillAbilityManager.SkillFinished -= skillFinished;
     }
     private void Update()
