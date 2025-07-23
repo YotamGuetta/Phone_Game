@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
@@ -11,6 +12,9 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private float knockbackForce;
     [SerializeField] private float knockbackStunTime;
 
+    private Animator animator;
+    private EnemyMovement enemyMovement;
+
     private Transform attackPoint;
     /*
     // On Collision with enemy damage
@@ -22,9 +26,15 @@ public class EnemyCombat : MonoBehaviour
         }
     }
     */
+
+    public bool AttackAnimationEnded {get; private set;}
+
     private void Awake()
     {
         attackPoint = attackPointForward;
+        animator = GetComponent<Animator>();
+        enemyMovement = GetComponent<EnemyMovement>();
+        AttackAnimationEnded = false;
     }
     private void OnEnable()
     {
@@ -61,7 +71,13 @@ public class EnemyCombat : MonoBehaviour
     {
         knockbackStunTime = newVal;
     }
-
+    public void AttackEnd()
+    {
+        //if the attack animation is done but the attack is still on cooldown go to idle state
+        animator.SetInteger("State", (int)EnemyAnimation.isIdle);
+        AttackAnimationEnded = true;
+        //enemyMovement.Chase();
+    }
     public void AttackUp() {
         attackPoint = attackPointUp;
         Attack();
@@ -76,10 +92,14 @@ public class EnemyCombat : MonoBehaviour
         attackPoint = attackPointDown;
         Attack();
     }
-
+    /// <summary>
+    /// The function to try deal damage to the player if he is still in range of the attack
+    /// </summary>
     private void Attack() 
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, weaponRange, playerLayer);
+
+        AttackAnimationEnded = false;
 
         if (hits.Length > 0) 
         {

@@ -24,7 +24,7 @@ public class SkillAbilityManager : MonoBehaviour
 
     private UnitController unitController;
     Dictionary<skillType, SkillAbillityExecutioner> skillsToTypeDictionary;
-    
+
     private int activeAnimationsCount = 0;
 
 
@@ -36,7 +36,7 @@ public class SkillAbilityManager : MonoBehaviour
         RunAftherInitialize?.Invoke();
     }
 
-        private Dictionary<skillType, SkillAbillityExecutioner> InitializeDictionary()
+    private Dictionary<skillType, SkillAbillityExecutioner> InitializeDictionary()
     {
         Dictionary<skillType, SkillAbillityExecutioner> skillsDictionaryItems = new Dictionary<skillType, SkillAbillityExecutioner>();
         bool skillfinishedAnimationAssighned = false;
@@ -44,7 +44,7 @@ public class SkillAbilityManager : MonoBehaviour
         //Destroy exsisting skills
         foreach (Transform ChildTransform in this.transform)
         {
-                Destroy(ChildTransform.gameObject);
+            Destroy(ChildTransform.gameObject);
         }
 
         //create all skills and add them to the dictionary
@@ -61,7 +61,6 @@ public class SkillAbilityManager : MonoBehaviour
                 skillAbillityExecutioner.SkillFinished += removeAnimationsToActiveCount;
                 skillfinishedAnimationAssighned = true;
             }
-
             skillsDictionaryItems.Add(item.type, skillAbillityExecutioner);
 
         }
@@ -89,7 +88,7 @@ public class SkillAbilityManager : MonoBehaviour
     {
         if (skillsToTypeDictionary.TryGetValue(type, out SkillAbillityExecutioner skillAbillity))
         {
-            if (skillAbillity.ActivateSkill(attackDirection)) 
+            if (skillAbillity.ActivateSkill(attackDirection))
             {
                 /*
                 skillTimer = Mathf.Max(skillTimer, skillAbillity.SkillTimer);
@@ -106,7 +105,7 @@ public class SkillAbilityManager : MonoBehaviour
             Debug.Log("No Skill " + type.ToString() + " In Dictionary.");
         }
     }
-    public float GetASkillCooldownByType(skillType type) 
+    public float GetASkillCooldownByType(skillType type)
     {
         return skillsToTypeDictionary[type].GetSkillCooldown();
     }
@@ -114,7 +113,7 @@ public class SkillAbilityManager : MonoBehaviour
     {
         return skillsToTypeDictionary[type].GetSkillIcon();
     }
-    private void addAnimationsToActiveCount(skillType type) 
+    private void addAnimationsToActiveCount(skillType type)
     {
         activeAnimationsCount++;
         SkillActivated?.Invoke(type);
@@ -122,7 +121,7 @@ public class SkillAbilityManager : MonoBehaviour
     private void removeAnimationsToActiveCount()
     {
         activeAnimationsCount--;
-        if(activeAnimationsCount == 0)
+        if (activeAnimationsCount == 0)
             SkillFinished?.Invoke();
     }
 }

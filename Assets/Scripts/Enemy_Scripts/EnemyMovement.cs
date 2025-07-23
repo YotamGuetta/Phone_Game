@@ -1,39 +1,31 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
     private int facingDirection = -1;
-    private EnemyState currEnemyState;
-    private Rigidbody2D rb;
-    private Animator anim;
-    private float attackCooldownTimer;
+    private NavMeshAgent agent;
+    private Transform player;
+    private Vector2 spawnPosition;
 
-    [SerializeField] private Transform player;
-    [SerializeField] private Transform detectionPoint;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private float playerDetectionRange = 5;
     [SerializeField] private float speed;
     [SerializeField] private float attackRange = 2;
     [SerializeField] private float attackCooldown = 2;
+    [SerializeField] private float patrolRadius = 5;
 
-    private bool enemyIsAttacking() {
-        return currEnemyState == EnemyState.Attacking || currEnemyState == EnemyState.AttackingUp || currEnemyState == EnemyState.AttackingDown;
-    }
-    private void makeEnemyFacePlayer() 
-    {
-        if (player.position.x > transform.position.x && facingDirection == -1 ||
-                player.position.x < transform.position.x && facingDirection == 1)
-        {
-            flip();
-        }
-    }
+    public bool isKnockedBack = false;
+    public bool reachedPatrolPoint { get; private set; }
     private void Start()
     {
-
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        changeState(EnemyState.Idle);
-        
+        reachedPatrolPoint = true;
+        spawnPosition = transform.position;
+        agent = GetComponent<NavMeshAgent>();
+        if(agent != null)
+        {
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
+        }       
     }
     private void OnEnable()
     {
@@ -45,139 +37,146 @@ public class EnemyMovement : MonoBehaviour
         EnemyStats.OnMovementSpeedChanged -= setSpeed;
     }
 
-    private void setSpeed(float newVal)
+    public void StopMoving()
     {
-        speed = newVal;
+        if(agent != null && agent.isOnNavMesh)
+            agent.isStopped = true;
     }
-
-    private void Update()
+    /// <summary>
+    /// Chases the last player the enemy saw
+    /// </summary>
+    public void Chase() 
     {
-        if (currEnemyState != EnemyState.Knockedback)
+        if (player == null)
         {
-            checkForPlayer();
+            return;
+        }
 
-            if (attackCooldownTimer > 0)
-            {
-                attackCooldownTimer -= Time.deltaTime;
-            }
-            if (currEnemyState == EnemyState.Chasing)
-            {
-                chase();
-            }
-            else if (enemyIsAttacking())
-            {
-                rb.linearVelocity = Vector2.zero;
+        moveEnemyToAPosition(player.position);
+    }
+    private void moveEnemyToAPosition(Vector2 position) 
+    {
+        makeEnemyFacePosition(position);
 
-            }
+        if (agent != null && agent.isOnNavMesh)
+        {
+            if (!isKnockedBack)
+                agent.isStopped = false;
+            agent.SetDestination(position);
         }
     }
-
-    private void chase()
+    /// <summary>
+    /// Set the player to chase and begin chasing
+    /// </summary>
+    /// <param name="player">The player to chase</param>
+    public void Chase(Transform player)
     {
-
-        makeEnemyFacePlayer();
-
-        Vector2 direction = (player.position - transform.position).normalized;
-        rb.linearVelocity = direction * speed;
+        this.player = player;
+        Chase();
     }
-    private void checkForPlayer()
+    /// <summary>
+    /// Checks if the player is in attack range and sends the direction he can be attacked from
+    /// </summary>
+    /// <param name="enemyAttackDirection">The direction the player can be reached</param>
+    /// <returns>Returns true if there is a player in attack range from any direction</returns>
+    public bool PlayerInAttackRange(out EnemyAttackDirection enemyAttackDirection)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(detectionPoint.position, playerDetectionRange, playerLayer);
+        enemyAttackDirection = EnemyAttackDirection.AttackingForward;
 
-        //If player detected by the enemy
-        if (hits.Length > 0)
+        if (player == null)
         {
-            player = hits[0].transform;
-
-            //If the enemy is in attacking distance and can attack
-            if (Vector2.Distance(transform.position, player.transform.position) <= attackRange && attackCooldownTimer <= 0)
-            {
-                attackCooldownTimer = attackCooldown;
-
-                //If the enemy is mostly horizontal to the player
-                if (Mathf.Abs(transform.position.x - player.transform.position.x) >= attackRange / 2)
-                {
-                    makeEnemyFacePlayer();
-                    changeState(EnemyState.Attacking);
-                }
-                //If the player is below the enemy
-                else if (transform.position.y > player.transform.position.y)
-                {
-                    changeState(EnemyState.AttackingDown);
-                }
-                else 
-                {
-                    changeState(EnemyState.AttackingUp);
-                }
-            }
-            else if (Vector2.Distance(transform.position, player.transform.position) > attackRange && !enemyIsAttacking())
-            {
-                changeState(EnemyState.Chasing);
-            }
+            return false;
         }
-        else
+
+        if (Vector2.Distance(transform.position, player.transform.position) <= attackRange)// && attackCooldownTimer <= 0)
         {
-            rb.linearVelocity = Vector2.zero;
-            changeState(EnemyState.Idle);
+
+            //If the enemy is mostly horizontal to the player
+            if (Mathf.Abs(transform.position.x - player.transform.position.x) >= attackRange / 2)
+            {
+                makeEnemyFacePosition(player.position);
+                enemyAttackDirection = EnemyAttackDirection.AttackingForward;
+            }
+            //If the player is below the enemy
+            else if (transform.position.y > player.transform.position.y)
+            {
+                enemyAttackDirection = EnemyAttackDirection.AttackingDown;
+            }
+            else
+            {
+                enemyAttackDirection = EnemyAttackDirection.AttackingUp;
+            }
+            return true;
         }
+        return false;
+    }
+    /// <summary>
+    /// Selects a point to let the enemy patrol to.
+    /// </summary>
+    public void startEnemyPatrol() 
+    {
+        reachedPatrolPoint = false;
+        Vector2 pointToGo = GetRandomPointInCircle(patrolRadius) + spawnPosition;
+        //if its a valide point to go to.
+        if (NavMesh.SamplePosition(pointToGo, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+        {
+            moveEnemyToAPosition(pointToGo);
+            // A coroutine to check when the enemy has reached the patrol point assigned.
+            StartCoroutine(WaitForAgentArrival());
+        }
+        else 
+        {
+            Debug.Log("patrol possition out of navMesh area");
+            reachedPatrolPoint = false;
+        }
+    }
+    private IEnumerator WaitForAgentArrival()
+    {
+        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        {
+            yield return null;
+        }
+        while (agent.velocity.sqrMagnitude > 0f)
+        {
+            yield return null;
+        }
+
+        reachedPatrolPoint = true;
+    }
+    private Vector2 GetRandomPointInCircle(float radius)
+    {
+        float angle = Random.Range(0f, Mathf.PI * 2);
+        float distance = Mathf.Sqrt(Random.Range(0f, 1f)) * radius;
+
+        float x = Mathf.Cos(angle) * distance;
+        float y = Mathf.Sin(angle) * distance;
+
+        return new Vector2(x, y);
     }
     private void flip()
     {
         facingDirection *= -1;
         transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
     }
-    public void changeState(EnemyState enemyState) 
+    private void makeEnemyFacePosition(Vector2 position)
     {
-        switch (currEnemyState) 
-        {
-            case EnemyState.Chasing: anim.SetBool("isChasing", false);
-                break;
-            case EnemyState.Attacking:
-                anim.SetBool("isAttacking", false);
-                break;
-            case EnemyState.AttackingUp:
-                anim.SetBool("isAttackingUp", false);
-                break;
-            case EnemyState.AttackingDown:
-                anim.SetBool("isAttackingDown", false);
-                break;
-            default:
-                 anim.SetBool("isIdle", false);
-                break;
-        }
-        currEnemyState = enemyState;
-        switch (currEnemyState)
-        {
-            case EnemyState.Chasing:
-                anim.SetBool("isChasing", true);
-                break;
-            case EnemyState.Attacking:
-                anim.SetBool("isAttacking", true);
-                break;
-            case EnemyState.AttackingUp:
-                anim.SetBool("isAttackingUp", true);
-                break;
-            case EnemyState.AttackingDown:
-                anim.SetBool("isAttackingDown", true);
-                break;
-            default:
-                anim.SetBool("isIdle", true);
-                break;
-        }
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(detectionPoint.position, playerDetectionRange);
-    }
-}
 
-public enum EnemyState 
-{
-    Idle,
-    Chasing,
-    Attacking,
-    AttackingUp,
-    AttackingDown,
-    Knockedback
+        if (position.x > transform.position.x && facingDirection == -1 ||
+                position.x < transform.position.x && facingDirection == 1)
+        {
+            flip();
+        }
+    }
+    private void setSpeed(float newVal)
+    {
+        speed = newVal;
+    }
+    // The patrol area gizmos
+    private void OnDrawGizmos()
+    {
+
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawWireSphere(transform.position, patrolRadius);
+    }
 }
