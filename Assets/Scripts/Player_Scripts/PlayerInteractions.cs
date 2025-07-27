@@ -8,9 +8,9 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (lastEnemyHit != null)
         {
-            lastEnemyHit.GetComponent<HealthPointsTracker>().FreeHealthInSlider();
+            lastEnemyHit.GetComponent<EnemyHealthPoints>().FreeHealthInSlider();
         }
         lastEnemyHit = enemy;
-        lastEnemyHit.GetComponent<HealthPointsTracker>().ShowHealthInSlider(enemyHealthSlider);
+        lastEnemyHit.GetComponent<EnemyHealthPoints>().ShowHealthInSlider(enemyHealthSlider);
     }
 }

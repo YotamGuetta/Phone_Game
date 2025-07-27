@@ -4,12 +4,11 @@ using System;
 public class PlayerStatsManager : MonoBehaviour
 {
     public delegate void Healthchanged(int healthAmount);
-    public static event Healthchanged OnMaxHealthchanged;
-    public static event Healthchanged OnCurrentHealthchanged;
 
     public static PlayerStatsManager Instance;
 
     public StatsPanelManager uIStats;
+    
 
     //[Header("Combat Stats")]
     public float weaponRange = 0.7f;
@@ -30,8 +29,8 @@ public class PlayerStatsManager : MonoBehaviour
 
     //[Header("Visualized Stats")]
     [SerializeField] private Transform attackPoint;
-
     [SerializeField] private bool activateDynamicHealth;
+    public PlayerHealthPoints playerHealthPoints;
 
     public bool ActivateDynamicHealth { get { return activateDynamicHealth; } }
     public readonly float[] R_COMBAT_STATS_DEFULT_VALUES = { 0.7f, 1, 2, 0.2f, 20, 1};
@@ -56,15 +55,15 @@ public class PlayerStatsManager : MonoBehaviour
     }
     public void UpdateMaxHealth(int healthAmount) 
     {
-        maxHealth += healthAmount;
-        currentHealth = healthAmount;
-        OnMaxHealthchanged(healthAmount);
+        //maxHealth += healthAmount;
+        //currentHealth = healthAmount;
+        playerHealthPoints.MaxHealth += healthAmount;
     }
     public void UpdateCurrentHealth(int healthAmount)
     {
-        currentHealth += healthAmount;
-        currentHealth = Math.Min(currentHealth, maxHealth);
-        OnCurrentHealthchanged(healthAmount);
+        //currentHealth += healthAmount;
+        //currentHealth = Math.Min(currentHealth, maxHealth);
+        playerHealthPoints.CurrentHealth += healthAmount;
     }
     public void UpdateSpeed(int amount)
     {

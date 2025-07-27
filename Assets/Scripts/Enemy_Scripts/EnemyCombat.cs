@@ -107,7 +107,7 @@ public class EnemyCombat : MonoBehaviour
             {
                 if (hit.tag == "Player")
                 {
-                    hit.GetComponent<HealthPointsTracker>().CurrentHealth -= damage;
+                    hit.GetComponent<HealthPointsTrackerAbs>().CurrentHealth -= damage;
                     hit.GetComponent<PlayerMovement>().Knockedback(transform, knockbackForce, knockbackStunTime);
                     break;
                 }

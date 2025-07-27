@@ -23,11 +23,11 @@ public class ExpManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        HealthPointsTracker.OnEnemyDefeated += GainExperience;
+        EnemyHealthPoints.OnEnemyDefeated += GainExperience;
     }
     private void OnDisable()
     {
-        HealthPointsTracker.OnEnemyDefeated -= GainExperience;
+        EnemyHealthPoints.OnEnemyDefeated -= GainExperience;
     }
     private void GainExperience(int amount) 
     {

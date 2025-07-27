@@ -19,6 +19,7 @@ public class PlayerStatsManagerEditor : Editor
     private Toggle toggleDynamicHealth;
 
     private int oldMaxHealthValue;
+    private int oldCurrHealthValue;
     private void OnEnable()
     {
         playerStatsManager = (PlayerStatsManager)target;
@@ -57,6 +58,10 @@ public class PlayerStatsManagerEditor : Editor
     private void OntCurrentHealthChanged(SerializedPropertyChangeEvent evt)
     {
         playerStatsManager.AdjustCurrentHealthChangeToValid();
+
+        oldCurrHealthValue = evt.changedProperty.intValue;
+        if (playerStatsManager != null && playerStatsManager.playerHealthPoints != null)
+            playerStatsManager.playerHealthPoints.updateHealthText(oldMaxHealthValue, oldCurrHealthValue);
     }
 
     private void OnMaxHealthChanged(SerializedPropertyChangeEvent evt)
@@ -64,6 +69,9 @@ public class PlayerStatsManagerEditor : Editor
         if (playerStatsManager.ActivateDynamicHealth)
             playerStatsManager.AdjustMaxHealthChangeToValid(oldMaxHealthValue);
         oldMaxHealthValue = evt.changedProperty.intValue;
+
+        if (playerStatsManager != null && playerStatsManager.playerHealthPoints != null)
+            playerStatsManager.playerHealthPoints.updateHealthText(oldMaxHealthValue, oldCurrHealthValue);
     }
 
     private void onCombatDefultValuesClick(ClickEvent evt) 

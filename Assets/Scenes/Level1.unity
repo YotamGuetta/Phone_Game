@@ -3018,6 +3018,7 @@ MonoBehaviour:
   currentHealth: 20
   attackPoint: {fileID: 482604240}
   activateDynamicHealth: 1
+  playerHealthPoints: {fileID: 737787725276570256}
 --- !u!4 &332755735
 Transform:
   m_ObjectHideFlags: 0
@@ -7770,13 +7771,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8739962696432792850, guid: 53858fcd852a7e440a1bb375b5709db3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2306628013277144013, guid: 53858fcd852a7e440a1bb375b5709db3, type: 3}
-      insertIndex: 4
+      insertIndex: 3
       addedObject: {fileID: 1445272633}
+    - targetCorrespondingSourceObject: {fileID: 2306628013277144013, guid: 53858fcd852a7e440a1bb375b5709db3, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1445272649}
     - targetCorrespondingSourceObject: {fileID: 2306628013277144013, guid: 53858fcd852a7e440a1bb375b5709db3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1445272631}
@@ -30593,6 +30598,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514ea83043902a64f87ac712a55ddc8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1445272649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445272619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28fb5060b0d6be94facfa144b94e6da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  currentHealth: 5
+  expWorth: 5
 --- !u!4 &1447003200 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3690123465906453942, guid: 5849f1a3f9fbc7947a380feb25713087, type: 3}
@@ -37608,7 +37628,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7225766872959227758, guid: a35f7a10f9ab9f34ca4a5c3ef61650e0, type: 3}
       insertIndex: 4
-      addedObject: {fileID: 737787725276570243}
+      addedObject: {fileID: 737787725276570256}
     - targetCorrespondingSourceObject: {fileID: 7225766872959227758, guid: a35f7a10f9ab9f34ca4a5c3ef61650e0, type: 3}
       insertIndex: 5
       addedObject: {fileID: 737787725276570247}
@@ -37649,23 +37669,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2b1f2fad7065341920e40346a4393c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &737787725276570243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172031369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0681898523fc0b34fb1a44bd992dcb47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 20
-  currentHealth: 20
-  healthText: {fileID: 938480555}
-  healthTextAnim: {fileID: 938480557}
-  expWorth: 0
 --- !u!114 &737787725276570247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37716,6 +37719,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealthSlider: {fileID: 1362439910}
+--- !u!114 &737787725276570256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172031369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ce6f633c3ba2d45bdf8c623567648c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthText: {fileID: 938480555}
+  healthTextAnim: {fileID: 938480557}
+  playerStatsManager: {fileID: 332755734}
 --- !u!1001 &1345332686240780671
 PrefabInstance:
   m_ObjectHideFlags: 0

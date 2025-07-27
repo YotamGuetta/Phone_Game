@@ -16,6 +16,7 @@ public class EnemyMovement : MonoBehaviour
 
     public bool isKnockedBack = false;
     public bool reachedPatrolPoint { get; private set; }
+    public float AttackCooldown { get { return attackCooldown; } }
     private void Start()
     {
         reachedPatrolPoint = true;

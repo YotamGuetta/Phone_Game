@@ -56,26 +56,46 @@ public class HitInputLogic : MonoBehaviour
         inputsQueue = newInputsQueue;
 
         //Check every input string possibility for the input
-        if ((eDirection = checkJab()) == eightDirection.center)
-            if ((eDirection = checkFullCircle()) == eightDirection.center)
-                if ((eDirection = checkHalfCircle()) == eightDirection.center)
-                    if ((eDirection = checkReverseHalfCircle()) == eightDirection.center)
-                        if ((eDirection = checkArc()) == eightDirection.center)
-                            if ((eDirection = checkReverseArc()) == eightDirection.center)
-                                Debug.Log("Input is jibrish");
-                            else
-                                skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
-                        else
-                            skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
-                    else
-                        skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
-                else
-                    skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
-            else
-                skillAbilityManager.ActivateSkill(eDirection, skillType.Circle);
-        else
+        if ((eDirection = checkJab()) != eightDirection.center)
+        {
             skillAbilityManager.ActivateSkill(eDirection, skillType.Jab);
+            return eDirection;
+        }
+
+        if ((eDirection = checkFullCircle()) != eightDirection.center)
+        {
+            skillAbilityManager.ActivateSkill(eDirection, skillType.Circle);
+            return eDirection;
+        }
+
+        if ((eDirection = checkHalfCircle()) != eightDirection.center)
+        {
+            skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
+            return eDirection;
+        }
+
+        if ((eDirection = checkReverseHalfCircle()) != eightDirection.center)
+        {
+            skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
+            return eDirection;
+        }
+
+        if ((eDirection = checkArc()) != eightDirection.center)
+        {
+            skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
+            return eDirection;
+        }
+
+        if ((eDirection = checkReverseArc()) != eightDirection.center)
+        {
+            skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
+            return eDirection;
+        }
+
+        //Input doesn't match any command
+        Debug.Log("Input is jibrish");
         return eDirection;
+        
     }
     //                 0
     //              0     0

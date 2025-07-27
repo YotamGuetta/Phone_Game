@@ -3,6 +3,7 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private PlayerInteractions playerInteractions;
 
     [SerializeField] private Vector2 direction = Vector2.right;
     [SerializeField] private float lifeSpawn = 2;
@@ -26,6 +27,7 @@ public class Arrow : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        playerInteractions = GetComponentInParent<PlayerInteractions>();
 
         rb.linearVelocity = direction * speed;
         Destroy(gameObject, lifeSpawn);
@@ -43,13 +45,10 @@ public class Arrow : MonoBehaviour
         // Binery comparison between the enemy layer and the object hit
         if ((enemyLayer.value & (1 << collision.gameObject.layer)) > 0)
         {
-            HealthPointsTracker enemyHealth = collision.gameObject.GetComponent<HealthPointsTracker>();
+            EnemyHealthPoints enemyHealth = collision.gameObject.GetComponent<EnemyHealthPoints>();
             collision.gameObject.GetComponent<EnemyKnockback>().Knockback(transform, knockbackForce, knockbackTime, stunTime);
             enemyHealth.CurrentHealth -= damage;
-            if (EnemyHealthSlider != null)
-            {
-                enemyHealth.ShowHealthInSlider(EnemyHealthSlider);
-            }
+            playerInteractions.ShowEnemyHealth(collision.gameObject);
             AttachToTarget(collision.gameObject.transform);
         }
         else if (!IgnoreObstacles &&(ObstacleLayer.value & (1 << collision.gameObject.layer)) > 0) 

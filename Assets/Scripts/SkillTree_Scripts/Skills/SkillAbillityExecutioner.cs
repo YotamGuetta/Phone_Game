@@ -59,7 +59,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
         // checks if the object is an enemy
         if (collision.tag == LayerMask.LayerToName((int)Mathf.Log(enemyLayer.value, 2)))
         {
-            HealthPointsTracker health = collision.GetComponent<HealthPointsTracker>();
+            EnemyHealthPoints health = collision.GetComponent<EnemyHealthPoints>();
             EnemyKnockback knockback = collision.GetComponent<EnemyKnockback>();
             if (health != null)
             {
@@ -131,7 +131,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
             {
                 foreach (var collider in results)
                 {
-                    HealthPointsTracker health = collider.GetComponent<HealthPointsTracker>();
+                    EnemyHealthPoints health = collider.GetComponent<EnemyHealthPoints>();
                     EnemyKnockback knockback = collider.GetComponent<EnemyKnockback>();
                     if (health != null)
                     {

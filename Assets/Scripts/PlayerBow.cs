@@ -62,7 +62,7 @@ public class PlayerBow : MonoBehaviour
     {
         if (shootTimer <= 0)
         {
-            Arrow arrow = Instantiate(arrowPrefab, launchPoint.position, Quaternion.identity).GetComponent<Arrow>();
+            Arrow arrow = Instantiate(arrowPrefab, launchPoint.position, Quaternion.identity, transform).GetComponent<Arrow>();
             arrow.Direction = aimDirection;
             arrow.EnemyHealthSlider = enemyHealthSlider;
             shootTimer = shootCooldown;

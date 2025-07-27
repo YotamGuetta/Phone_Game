@@ -102,7 +102,7 @@ public class PlayerCombat : MonoBehaviour
             // Deal damage to enemy and aplay stun, knockback
             foreach (Collider2D enemy in enemies)
             {
-                enemy.GetComponent<HealthPointsTracker>().CurrentHealth -= PlayerStatsManager.Instance.damage;
+                enemy.GetComponent<EnemyHealthPoints>().CurrentHealth -= PlayerStatsManager.Instance.damage;
                 enemy.GetComponent<EnemyKnockback>().Knockback(transform, PlayerStatsManager.Instance.knockbackForce, PlayerStatsManager.Instance.KnockbackDuration, PlayerStatsManager.Instance.stunTime);
             }
         }
@@ -111,9 +111,9 @@ public class PlayerCombat : MonoBehaviour
     {
         if (lastEnemyHit != null) 
         {
-            lastEnemyHit.GetComponent<HealthPointsTracker>().FreeHealthInSlider();
+            lastEnemyHit.GetComponent<EnemyHealthPoints>().FreeHealthInSlider();
         }
         lastEnemyHit = enemy;
-        lastEnemyHit.GetComponent<HealthPointsTracker>().ShowHealthInSlider(enemyHealthSlider);
+        lastEnemyHit.GetComponent<EnemyHealthPoints>().ShowHealthInSlider(enemyHealthSlider);
     }
 }
