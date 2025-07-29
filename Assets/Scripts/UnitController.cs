@@ -25,7 +25,10 @@ public class UnitController : MonoBehaviour
     public void SetAttackDirection(eightDirection attackDirection) 
     {
         setActivaAttackPoint(attackDirection);
-        setDirectionFacing(attackDirection);
+        if (tag == "Player")
+        {
+            setDirectionFacing(attackDirection);
+        }
     }
     private void setActivaAttackPoint(eightDirection attackDirection)
     {

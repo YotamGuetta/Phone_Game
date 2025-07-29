@@ -13,7 +13,8 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private float knockbackStunTime;
 
     private Animator animator;
-    private EnemyMovement enemyMovement;
+    private SkillAbilityManager skillAbilityManager;
+    private eightDirection attackDirection;
 
     private Transform attackPoint;
     /*
@@ -33,7 +34,7 @@ public class EnemyCombat : MonoBehaviour
     {
         attackPoint = attackPointForward;
         animator = GetComponent<Animator>();
-        enemyMovement = GetComponent<EnemyMovement>();
+        skillAbilityManager = GetComponentInChildren<SkillAbilityManager>();
         AttackAnimationEnded = false;
     }
     private void OnEnable()
@@ -80,16 +81,19 @@ public class EnemyCombat : MonoBehaviour
     }
     public void AttackUp() {
         attackPoint = attackPointUp;
+        attackDirection = eightDirection.up;
         Attack();
     }
     public void AttackForward()
     {
         attackPoint = attackPointForward;
+        attackDirection = eightDirection.left;
         Attack();
     }
     public void AttackDown()
     {
         attackPoint = attackPointDown;
+        attackDirection = eightDirection.down;
         Attack();
     }
     /// <summary>
@@ -97,6 +101,8 @@ public class EnemyCombat : MonoBehaviour
     /// </summary>
     private void Attack() 
     {
+        skillAbilityManager.ActivateRandomSkill(attackDirection);
+        /*
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, weaponRange, playerLayer);
 
         AttackAnimationEnded = false;
@@ -114,5 +120,6 @@ public class EnemyCombat : MonoBehaviour
             }
         
         }
+        */
     }
 }

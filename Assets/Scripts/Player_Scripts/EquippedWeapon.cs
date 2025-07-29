@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EquippedWeapon : MonoBehaviour
 {
+    [SerializeField] SkillAbilityManager playerSkillAbilityManager;
     private SpriteRenderer spriteRenderer;
     private void Awake()
     {
@@ -10,13 +11,13 @@ public class EquippedWeapon : MonoBehaviour
     private void OnEnable()
     {
         // Ignores parameter
-        SkillAbilityManager.SkillActivated += (skillType _) => hideWeapon();
-        SkillAbilityManager.SkillFinished += showWeapon;
+        playerSkillAbilityManager.SkillActivated += (skillType _) => hideWeapon();
+        playerSkillAbilityManager.SkillFinished += showWeapon;
     }
     private void OnDisable()
     {
-        SkillAbilityManager.SkillActivated -= (skillType _) => hideWeapon();
-        SkillAbilityManager.SkillFinished -= showWeapon;
+        playerSkillAbilityManager.SkillActivated -= (skillType _) => hideWeapon();
+        playerSkillAbilityManager.SkillFinished -= showWeapon;
     }
     private void showWeapon() 
     {

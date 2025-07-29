@@ -50,52 +50,51 @@ public class HitInputLogic : MonoBehaviour
         lastDirectionChange = eightDirection.center;
         CheckButtonRelease?.Invoke();
     }
-    public eightDirection CheckActionByInputs(List<eightDirection> newInputsQueue)
+    public void CheckActionByInputs(List<eightDirection> newInputsQueue)
     {
         eightDirection eDirection;
         inputsQueue = newInputsQueue;
 
         //Check every input string possibility for the input
+
         if ((eDirection = checkJab()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.Jab);
-            return eDirection;
+            return;
         }
 
         if ((eDirection = checkFullCircle()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.Circle);
-            return eDirection;
+            return;
         }
 
         if ((eDirection = checkHalfCircle()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
-            return eDirection;
+            return;
         }
 
         if ((eDirection = checkReverseHalfCircle()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.HalfCircle);
-            return eDirection;
+            return;
         }
 
         if ((eDirection = checkArc()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
-            return eDirection;
+            return;
         }
 
         if ((eDirection = checkReverseArc()) != eightDirection.center)
         {
             skillAbilityManager.ActivateSkill(eDirection, skillType.Arc);
-            return eDirection;
+            return;
         }
 
         //Input doesn't match any command
         Debug.Log("Input is jibrish");
-        return eDirection;
-        
     }
     //                 0
     //              0     0

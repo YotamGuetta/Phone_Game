@@ -33,17 +33,18 @@ public class SkillAbilitySO : ScriptableObject
     {
 
     }
-    public void CreateConeColliderForSkill(GameObject obj)
+    public Collider2D CreateConeColliderForSkill(GameObject obj)
     {
-        CreateConeCollider(obj, size, angle, segments);
+        return CreateConeCollider(obj, size, angle, segments);
     }
-    public void CreateConeCollider(GameObject obj, Vector3 possition, Quaternion rotation)
+    public Collider2D CreateConeCollider(GameObject obj, Vector3 possition, Quaternion rotation)
     {
-        CreateConeCollider(obj, size, angle, segments);
+        Collider2D collider = CreateConeCollider(obj, size, angle, segments);
         obj.transform.rotation = rotation;
         obj.transform.position = possition;
+        return collider;
     }
-    public void CreateConeCollider(GameObject obj, float radius, float angle, int segments)
+    public Collider2D CreateConeCollider(GameObject obj, float radius, float angle, int segments)
     {
         PolygonCollider2D poly = obj.AddComponent<PolygonCollider2D>();
 
@@ -62,16 +63,18 @@ public class SkillAbilitySO : ScriptableObject
         }
 
         poly.SetPath(0, points.ToArray());
+        return poly;
     }
-    public void CreateBoxColliderForSkill(GameObject obj)
+    public Collider2D CreateBoxColliderForSkill(GameObject obj)
     {
         BoxCollider2D boxCollider = obj.AddComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
         boxCollider.size = new Vector2(size * obj.transform.localScale.x, obj.transform.localScale.y);
         //boxCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
         boxCollider.offset += new Vector2(range, 0);
+        return boxCollider;
     }
-    public void CreateBoxColliderForSkill(GameObject obj, Vector3 possition, Quaternion rotation)
+    public Collider2D CreateBoxColliderForSkill(GameObject obj, Vector3 possition, Quaternion rotation)
     {
         BoxCollider2D boxCollider = obj.AddComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
@@ -80,14 +83,16 @@ public class SkillAbilitySO : ScriptableObject
         boxCollider.transform.position = possition;
         //boxCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
         boxCollider.offset += new Vector2(range, 0);
+        return boxCollider;
     }
-    public void CreateCircleColliderForSkill(GameObject obj)
+    public Collider2D CreateCircleColliderForSkill(GameObject obj)
     {
         CircleCollider2D circleCollider = obj.AddComponent<CircleCollider2D>();
         circleCollider.isTrigger = true;
         circleCollider.radius = size * obj.transform.localScale.y;
         //circleCollider.transform.position = obj.transform.position + new Vector3(range, 0, 0);
         circleCollider.offset += new Vector2(range, 0);
+        return circleCollider;
     }
 }
 public enum shape 

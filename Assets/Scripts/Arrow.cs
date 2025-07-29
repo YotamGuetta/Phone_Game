@@ -45,10 +45,20 @@ public class Arrow : MonoBehaviour
         // Binery comparison between the enemy layer and the object hit
         if ((enemyLayer.value & (1 << collision.gameObject.layer)) > 0)
         {
-            EnemyHealthPoints enemyHealth = collision.gameObject.GetComponent<EnemyHealthPoints>();
-            collision.gameObject.GetComponent<EnemyKnockback>().Knockback(transform, knockbackForce, knockbackTime, stunTime);
+            EnemyKnockback enemyKnockback = collision.gameObject.GetComponent<EnemyKnockback>();
+            if (enemyKnockback != null)
+            {
+                enemyKnockback.Knockback(transform, knockbackForce, knockbackTime, stunTime);
+            }
+
+            HealthPointsTrackerAbs enemyHealth = collision.gameObject.GetComponent<EnemyHealthPoints>();
             enemyHealth.CurrentHealth -= damage;
-            playerInteractions.ShowEnemyHealth(collision.gameObject);
+
+            if (playerInteractions != null)
+            {
+                playerInteractions.ShowEnemyHealth(collision.gameObject);
+            }
+
             AttachToTarget(collision.gameObject.transform);
         }
         else if (!IgnoreObstacles &&(ObstacleLayer.value & (1 << collision.gameObject.layer)) > 0) 

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : UnitController
 {
     private int facingDirection = -1;
     private NavMeshAgent agent;
@@ -162,8 +162,8 @@ public class EnemyMovement : MonoBehaviour
     private void makeEnemyFacePosition(Vector2 position)
     {
 
-        if (position.x > transform.position.x && facingDirection == -1 ||
-                position.x < transform.position.x && facingDirection == 1)
+        if (position.x < transform.position.x && facingDirection == -1 ||
+                position.x > transform.position.x && facingDirection == 1)
         {
             flip();
         }

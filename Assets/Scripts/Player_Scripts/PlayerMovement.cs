@@ -18,27 +18,29 @@ public class PlayerMovement : UnitController
     private float currSpeed;
     private bool isShooting = false;
     private bool isSkillActive = false;
-
+    private SkillAbilityManager skillAbilityManager;
     public Vector2 LastDirectionMoved { get { return lastDirectionMoved; } }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         lastDirectionMoved = Vector2.up;
         rb = GetComponent<Rigidbody2D>();
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponent<PlayerInput>();       
         currSpeed = PlayerStatsManager.Instance.movementSpeed;
     }
     private void OnEnable()
     {
+        skillAbilityManager = GetComponentInChildren<SkillAbilityManager>();
         // Ignores parameter
-        SkillAbilityManager.SkillActivated += (skillType _) => skillActivated();
-        SkillAbilityManager.SkillFinished += skillFinished;
+        skillAbilityManager.SkillActivated += (skillType _) => skillActivated();
+        skillAbilityManager.SkillFinished += skillFinished;
     }
     private void OnDisable()
     {
+        skillAbilityManager = GetComponentInChildren<SkillAbilityManager>();
         // Ignores parameter
-        SkillAbilityManager.SkillActivated -= (skillType _) => skillActivated();
-        SkillAbilityManager.SkillFinished -= skillFinished;
+        skillAbilityManager.SkillActivated -= (skillType _) => skillActivated();
+        skillAbilityManager.SkillFinished -= skillFinished;
     }
     private void Update()
     {

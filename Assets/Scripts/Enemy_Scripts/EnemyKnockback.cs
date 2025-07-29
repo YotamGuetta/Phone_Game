@@ -1,13 +1,11 @@
 using System.Collections;
 using Unity.Behavior;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyKnockback : MonoBehaviour
 {
     private Rigidbody2D rb;
     private EnemyMovement enemyMovement;
-    private NavMeshAgent agent;
     private BehaviorGraphAgent behaviorGraphAgent;
 
     private BlackboardVariable<bool> isKnockedBack;
@@ -15,14 +13,17 @@ public class EnemyKnockback : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         enemyMovement = GetComponent<EnemyMovement>();
-        agent = GetComponent<NavMeshAgent>();
         behaviorGraphAgent = GetComponent<BehaviorGraphAgent>();
         behaviorGraphAgent.GetVariable<bool>("IsKnockedbacked", out isKnockedBack);
     }
 
     public void Knockback(Transform forceTransform, float knockbackForce, float knockbackDuration, float stunTime)
     {
-        // enemyMovement.changeState(EnemyState.Knockedback);
+        //Avoids stun chain
+        if (enemyMovement.isKnockedBack) 
+        {
+            return;
+        }
         enemyMovement.isKnockedBack = true;
         
         isKnockedBack.Value = true;
@@ -35,10 +36,9 @@ public class EnemyKnockback : MonoBehaviour
     IEnumerator stunTimer(float knockbackDuration, float stunTime) {
         yield return new WaitForSeconds(knockbackDuration);
         rb.linearVelocity = Vector2.zero;
+
         yield return new WaitForSeconds(stunTime);
         enemyMovement.isKnockedBack = false;
         isKnockedBack.Value = false;
-        // enemyMovement.changeState(EnemyState.Idle);
-
     }
 }

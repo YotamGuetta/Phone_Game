@@ -11,10 +11,12 @@ public class SkillAbillityExecutioner: MonoBehaviour
      private LayerMask enemyLayer;
      private PlayerInteractions playerInteractions;
 
-    private SkillAnimationManager SkillAnimationManager;
+    private SkillAnimationManager skillAnimationManager;
     private float skillTimer = 0;
     private List<GameObject> enemiesIncountered;
     private UnitController unitController;
+    private Collider2D thisSkillCollider2D;
+
     public float SkillTimer { get { return skill.SkillCooldown; } }
     public void Initialize(SkillAbilitySO skillAbilitySO, UnitController unitController, LayerMask enemyLayer, PlayerInteractions playerInteractions)
     {
@@ -26,7 +28,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
     }
     private void Start()
     {
-        SkillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
+        skillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
         enemiesIncountered = new List<GameObject>();
     }
     private void OnEnable()
@@ -36,14 +38,22 @@ public class SkillAbillityExecutioner: MonoBehaviour
     private void OnDisable()
     {
         SkillAnimationManager.OnAnimationEnded -= endSkill;
-
     }
     private void endSkill()
     {
         skill.skillEnded();
         enemiesIncountered.Clear();
         Destroy(GetComponent<Collider2D>());
-        SkillFinished?.Invoke();
+        /*
+        if (GetComponentInParent<SkillAbilityManager>().tag == "Player")
+        {
+            Debug.Log("Player Attacked");
+            SkillFinished?.Invoke();
+        }
+        else 
+        {
+            Debug.Log("Enemy Attacked");
+        }*/
     }
 
     //for dealing damage once while collider is active
@@ -59,7 +69,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
         // checks if the object is an enemy
         if (collision.tag == LayerMask.LayerToName((int)Mathf.Log(enemyLayer.value, 2)))
         {
-            EnemyHealthPoints health = collision.GetComponent<EnemyHealthPoints>();
+            HealthPointsTrackerAbs health = collision.GetComponent<HealthPointsTrackerAbs>();
             EnemyKnockback knockback = collision.GetComponent<EnemyKnockback>();
             if (health != null)
             {
@@ -87,22 +97,29 @@ public class SkillAbillityExecutioner: MonoBehaviour
         unitController.SetAttackDirection(attackDirection);
 
         //Makes a 2d collider based on skill shape
-        switch (skill.AreaShape)
-        {
-            case shape.Cone:
-                skill.CreateConeCollider(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                break;
-            case shape.Square:
-                skill.CreateBoxColliderForSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                break;
-            case shape.Circle:
-                skill.CreateCircleColliderForSkill(gameObject); break;
-        }
+        make2DColliderForSkill();
+
+        skillAnimationManager.OnAnimationApex += () => TurnColliderOnOrOff(true);
 
         playAnimation();
 
         skillTimer = skill.SkillCooldown;
         return true;
+    }
+    private void make2DColliderForSkill() 
+    {
+        switch (skill.AreaShape)
+        {
+            case shape.Cone:
+                thisSkillCollider2D = skill.CreateConeCollider(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
+                break;
+            case shape.Square:
+                thisSkillCollider2D = skill.CreateBoxColliderForSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
+                break;
+            case shape.Circle:
+                thisSkillCollider2D = skill.CreateCircleColliderForSkill(gameObject); break;
+        }
+        TurnColliderOnOrOff(false);
     }
     private void Update()
     {
@@ -111,13 +128,25 @@ public class SkillAbillityExecutioner: MonoBehaviour
     }
     private void playAnimation()
     {
-        if (SkillAnimationManager != null && skill.AnimationClip != null)
+        if (skillAnimationManager != null && skill.AnimationClip != null)
         {
-            SkillAnimationManager.transform.position = Vector3.right;
-            SkillAnimationManager.StartAnimation(skill.AnimationClip.name);
+            skillAnimationManager.transform.position = Vector3.right;
+            skillAnimationManager.StartAnimation(skill.AnimationClip.name, this);
+        }
+    }
+    public void ChangeSkill(SkillAbilitySO newSkill) 
+    {
+        skill = newSkill;
+    }
+    public void TurnColliderOnOrOff(bool turnOn)
+    {
+        if (thisSkillCollider2D != null)
+        {
+            thisSkillCollider2D.enabled = turnOn;
         }
     }
     //For dealing damage once in a single frame to every enemy in enemy layer
+    /*
     public void DealDamage()
     {
         Collider2D collider2D = GetComponent<Collider2D>();
@@ -131,7 +160,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
             {
                 foreach (var collider in results)
                 {
-                    EnemyHealthPoints health = collider.GetComponent<EnemyHealthPoints>();
+                    HealthPointsTrackerAbs health = collider.GetComponent<HealthPointsTrackerAbs>();
                     EnemyKnockback knockback = collider.GetComponent<EnemyKnockback>();
                     if (health != null)
                     {
@@ -148,7 +177,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     public float GetSkillCooldown() 
     {
