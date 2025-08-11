@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    private GameObject lastEnemyHit;
-    [SerializeField] private GameObject enemyHealthSlider;
-    public void ShowEnemyHealth(GameObject enemy)
+    private static GameObject lastEnemyHit;
+    private static GameObject enemyHealthSliderContainer;
+    [SerializeField] private  GameObject enemyHealthSlider;
+    private void Start()
+    {
+        enemyHealthSliderContainer = enemyHealthSlider;
+    }
+    public static void ShowEnemyHealth(GameObject enemy)
     {
         if (lastEnemyHit != null)
         {
             lastEnemyHit.GetComponent<EnemyHealthPoints>().FreeHealthInSlider();
         }
         lastEnemyHit = enemy;
-        lastEnemyHit.GetComponent<EnemyHealthPoints>().ShowHealthInSlider(enemyHealthSlider);
+        lastEnemyHit.GetComponent<EnemyHealthPoints>().ShowHealthInSlider(enemyHealthSliderContainer);
     }
 }

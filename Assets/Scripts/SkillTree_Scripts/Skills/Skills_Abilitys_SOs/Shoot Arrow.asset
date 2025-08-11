@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 939862cc19101734fab301dc87017d61, type: 3}
+  m_Name: Shoot Arrow
+  m_EditorClassIdentifier: 
+  effect: 1
+  size: 1
+  range: 8
+  damage: 1
+  areaShape: 0
+  angle: 90
+  segments: 10
+  skillIcon: {fileID: -4346244404228752641, guid: 7398cc9f21af64c4b86f3281436652d4, type: 3}
+  animation: {fileID: 7400000, guid: 57249eb9b581f1744af0d54d6266d472, type: 2}
+  skillCooldown: 0.5
+  knockbackForce: 5
+  knockbackDuration: 0.3
+  stunTime: 0.3
+  arrowPrefab: {fileID: 9008323261286574560, guid: e4523a875b96c0a4fad076972ede0ae4, type: 3}
+  projectileCount: 3
+  spreadAngle: 45

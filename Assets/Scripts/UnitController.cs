@@ -10,6 +10,14 @@ public class UnitController : MonoBehaviour
 
     private Transform activeAttackPoint;
 
+    public bool UnitIsFliped
+    {
+        get
+        {
+            return transform.localScale.x < 0;
+        }
+    }
+
     public Vector3 AttackPossition()
     {
         return activeAttackPoint.position;

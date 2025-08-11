@@ -5,6 +5,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New Skill", menuName = "SkillSO/ New Skill")]
 public class SkillAbilitySO : ScriptableObject
 {
+    [SerializeField] private skillEffect effect;
     [SerializeField] private float size = 3f;
     [SerializeField] private float range = 3f;
     [SerializeField] private int damage;
@@ -17,6 +18,10 @@ public class SkillAbilitySO : ScriptableObject
     [SerializeField] private float knockbackForce;
     [SerializeField] private float knockbackDuration;
     [SerializeField] private float stunTime;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private int projectileCount = 1;
+    [SerializeField] private float spreadAngle = 45;
+
     public float Size { get { return size; } }
     public float Range { get { return range; } }
     public int Damage { get { return damage; } }
@@ -94,10 +99,93 @@ public class SkillAbilitySO : ScriptableObject
         circleCollider.offset += new Vector2(range, 0);
         return circleCollider;
     }
+    public void InstantiateSkill(GameObject obj, Vector3 possition, Quaternion rotation, UnitController unitController, LayerMask enemyLayer, LayerMask playerLayer) 
+    {
+        switch (effect) 
+        {
+            case skillEffect.Area:
+                make2DColliderForSkill(obj, possition, rotation);
+                    break;
+            case skillEffect.Projectile:
+                FireCone(obj, possition, rotation, unitController, enemyLayer, playerLayer);
+                break;
+        }
+    }
+    private void make2DColliderForSkill(GameObject gameObject, Vector3 possition, Quaternion rotation)
+    {
+        Collider2D collider = null;
+        switch (AreaShape)
+        {
+            case shape.Cone:
+                collider = CreateConeCollider(gameObject, possition, rotation);
+                break;
+            case shape.Square:
+                collider = CreateBoxColliderForSkill(gameObject, possition, rotation);
+                break;
+            case shape.Circle:
+                collider = CreateCircleColliderForSkill(gameObject); break;
+        }
+        if (collider != null) 
+        {
+            collider.enabled = false;
+        }
+    }
+    public void FireCone(GameObject shooter, Vector3 position, Quaternion rotation, UnitController unitController, LayerMask enemyLayer, LayerMask playerLayer)
+    {
+        bool isFlipped = unitController.UnitIsFliped;
+
+        float baseAngle = rotation.eulerAngles.z;
+        if (isFlipped)
+        {
+            baseAngle = baseAngle - 180;
+        }
+
+        float angleStep = (projectileCount > 1) ? spreadAngle / (projectileCount - 1) : 0f;
+        float startAngle = baseAngle - spreadAngle / 2f;
+
+        string debug = "Directions:";
+        //Debug.Log("position:" + position + " baseAngle: " + baseAngle + " flipped: " + isFlipped);
+
+        for (int i = 0; i < projectileCount; i++)
+        {
+            float angle = startAngle + i * angleStep;
+            Quaternion projectileRotation = Quaternion.Euler(0, 0, angle);
+            Vector2 direction = projectileRotation * Vector2.right;
+
+            debug += $" D{i}: {direction} A{i}: {angle}";
+
+            Arrow arrow = Instantiate(arrowPrefab, position, projectileRotation).GetComponent<Arrow>();
+            arrow.InitializeArrow(direction.normalized, enemyLayer);
+            arrow.GetComponent<Collider2D>().excludeLayers |= playerLayer;
+        }
+
+        //Debug.Log(debug);
+    }
+    private Vector2 getArrowAimDirection(Vector3 position, Quaternion rotation) 
+    {
+        Vector3 directionV3 = rotation * Vector3.right;
+        float faceDirection;
+        if (position.x == 0)
+        {
+            faceDirection = 1;
+        }
+        else
+        {
+            //-1 if x is negetive, 1 if x is possitive.
+            faceDirection = position.x / Mathf.Abs(position.x);
+        }
+        Vector2 direction = new Vector2(directionV3.x, directionV3.y) * faceDirection;
+        return direction;
+    }
 }
 public enum shape 
 {
     Square,
     Circle,
-    Cone
+    Cone,
+}
+public enum skillEffect 
+{
+    Area,
+    Projectile
 }

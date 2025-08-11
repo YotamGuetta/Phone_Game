@@ -7,10 +7,12 @@ public class PlayerMovement : UnitController
     public FixedJoystick joystick;
     public Animator anim;
 
+    private readonly float DEFAULT_SPEED_MULTIPLIER = 1;
     private Vector2 lastDirectionMoved;
     
     private float hInput, vInput;
     private Rigidbody2D rb;
+    private float slowBySkillUsage;
     
     private bool isKnockedback;
     private PlayerInput playerInput;
@@ -27,6 +29,7 @@ public class PlayerMovement : UnitController
         rb = GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();       
         currSpeed = PlayerStatsManager.Instance.movementSpeed;
+        slowBySkillUsage = DEFAULT_SPEED_MULTIPLIER;
     }
     private void OnEnable()
     {
@@ -53,11 +56,16 @@ public class PlayerMovement : UnitController
     }
     private void skillActivated() 
     {
+        slowBySkillUsage = PlayerStatsManager.Instance.aimingMovmentPenelty;
         isSkillActive = true;
+        //Debug.Log("Slow player using skill");
     }
     private void skillFinished()
     {
+        slowBySkillUsage = DEFAULT_SPEED_MULTIPLIER;
+
         isSkillActive = false;
+        //Debug.Log("return player speed to normal afther using skill");
     }
     public void SetIsPlayerAiming(bool IsShooting) 
     {
@@ -104,11 +112,13 @@ public class PlayerMovement : UnitController
             //Multiplied by the max value to keep the accurate movement momentum.
             Vector2 velocity = new Vector2(hInput, vInput).normalized
                 * Mathf.Max(Mathf.Abs(hInput), Mathf.Abs(vInput))
-                * currSpeed;
+                * currSpeed
+                * slowBySkillUsage;
+
             //Slower movement when using a skill
             if (isSkillActive) 
             {
-                velocity *= PlayerStatsManager.Instance.aimingMovmentPenelty;
+                //velocity *= PlayerStatsManager.Instance.aimingMovmentPenelty;
             }
             rb.linearVelocity = velocity;
         }

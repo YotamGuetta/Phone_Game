@@ -65,11 +65,11 @@ public class SkillAbilityManager : MonoBehaviour
                 skillAbillityExecutioner.SkillActivated += () => addAnimationsToActiveCount(item.type);
 
                 //The tracker for the end only needs to check for the end of the animation in the animator once (the animator is shared between all skills) 
-                if (!skillfinishedAnimationAssighned)
-                {
+                //if (!skillfinishedAnimationAssighned)
+                //{
                     skillAbillityExecutioner.SkillFinished += removeAnimationsToActiveCount;
-                    skillfinishedAnimationAssighned = true;
-                }
+                //    skillfinishedAnimationAssighned = true;
+                //}
             }
         }
 
@@ -140,6 +140,7 @@ public class SkillAbilityManager : MonoBehaviour
     }
     private void removeAnimationsToActiveCount()
     {
+        //Debug.Log(" -1 Active Count ");
         if (activeAnimationsCount == 0) 
         {
             return;

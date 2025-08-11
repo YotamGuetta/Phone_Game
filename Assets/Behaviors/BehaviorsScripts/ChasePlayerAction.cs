@@ -26,6 +26,10 @@ public partial class ChasePlayerAction : Action
         //Checks if the player is in attack range
         bool success = Moves.Value.PlayerInAttackRange(out EnemyAttackDirection enemyAttackDirection);
         Direction.Value = enemyAttackDirection;
+        if (success) 
+        {
+            Moves.Value.StopMoving();
+        }
         //Returns success if the player was in atttack range else failure
         return success ? Status.Success : Status.Failure;
     }

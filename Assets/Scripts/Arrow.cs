@@ -3,7 +3,6 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private PlayerInteractions playerInteractions;
 
     [SerializeField] private Vector2 direction = Vector2.right;
     [SerializeField] private float lifeSpawn = 2;
@@ -21,25 +20,20 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float stunTime;
 
     public static bool IgnoreObstacles = false;
-    public Vector2 Direction { get { return direction; } set { direction = value; rotateArrow(); } }
-    public GameObject EnemyHealthSlider { get; set; }
+    public void InitializeArrow(Vector2 direction, LayerMask enemyLayer) 
+    {
+        this.direction = direction;
+        this.enemyLayer = enemyLayer;
+    }
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        playerInteractions = GetComponentInParent<PlayerInteractions>();
 
         rb.linearVelocity = direction * speed;
         Destroy(gameObject, lifeSpawn);
     }
-    private void rotateArrow() 
-    {
-        //Calculate the angle between 2 points in degrees
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        //Turns Euker angles and converts them to quaternion values
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Binery comparison between the enemy layer and the object hit
@@ -51,12 +45,12 @@ public class Arrow : MonoBehaviour
                 enemyKnockback.Knockback(transform, knockbackForce, knockbackTime, stunTime);
             }
 
-            HealthPointsTrackerAbs enemyHealth = collision.gameObject.GetComponent<EnemyHealthPoints>();
+            HealthPointsTrackerAbs enemyHealth = collision.gameObject.GetComponent<HealthPointsTrackerAbs>();
             enemyHealth.CurrentHealth -= damage;
 
-            if (playerInteractions != null)
+            if (enemyHealth is EnemyHealthPoints)
             {
-                playerInteractions.ShowEnemyHealth(collision.gameObject);
+                PlayerInteractions.ShowEnemyHealth(collision.gameObject);
             }
 
             AttachToTarget(collision.gameObject.transform);
@@ -70,10 +64,9 @@ public class Arrow : MonoBehaviour
     {
         sr.sprite = buriedSprite;
 
-        rb.linearVelocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Kinematic;
-
+        //rb.linearVelocity = Vector2.zero;
+        //rb.bodyType = RigidbodyType2D.Kinematic;
+        Destroy(rb);
         transform.SetParent(target);
     }
-
 }

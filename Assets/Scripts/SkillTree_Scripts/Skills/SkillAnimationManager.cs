@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SkillAnimationManager : MonoBehaviour
 {
-    public static Action OnAnimationEnded;
+    public Action OnAnimationEnded;
     public Action OnAnimationApex;
 
     private SpriteRenderer spriteRenderer;
@@ -38,9 +38,10 @@ public class SkillAnimationManager : MonoBehaviour
         animator.Play("Idle");
         spriteRenderer.enabled = false;
     }
-    public void AnimationApex() 
+    public void AnimationApex()
     {
-        if(activatingExecutioner == thisSkillAbillityExecutioner) 
+
+        if (activatingExecutioner == thisSkillAbillityExecutioner)
         {
             OnAnimationApex?.Invoke();
         }

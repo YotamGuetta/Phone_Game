@@ -176,7 +176,7 @@ public class EnemyMovement : UnitController
     private void OnDrawGizmos()
     {
 
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.blue;
 
         Gizmos.DrawWireSphere(transform.position, patrolRadius);
     }

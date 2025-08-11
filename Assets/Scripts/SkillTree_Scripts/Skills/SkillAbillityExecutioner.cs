@@ -16,7 +16,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
     private List<GameObject> enemiesIncountered;
     private UnitController unitController;
     private Collider2D thisSkillCollider2D;
-
+    private bool skillISActive = false;
     public float SkillTimer { get { return skill.SkillCooldown; } }
     public void Initialize(SkillAbilitySO skillAbilitySO, UnitController unitController, LayerMask enemyLayer, PlayerInteractions playerInteractions)
     {
@@ -31,29 +31,18 @@ public class SkillAbillityExecutioner: MonoBehaviour
         skillAnimationManager = GetComponentInChildren<SkillAnimationManager>();
         enemiesIncountered = new List<GameObject>();
     }
-    private void OnEnable()
-    {
-        SkillAnimationManager.OnAnimationEnded += endSkill;
-    }
-    private void OnDisable()
-    {
-        SkillAnimationManager.OnAnimationEnded -= endSkill;
-    }
+
     private void endSkill()
     {
+        //Debug.Log("skill finished");
         skill.skillEnded();
         enemiesIncountered.Clear();
         Destroy(GetComponent<Collider2D>());
-        /*
-        if (GetComponentInParent<SkillAbilityManager>().tag == "Player")
+        if (skillAnimationManager != null)
         {
-            Debug.Log("Player Attacked");
-            SkillFinished?.Invoke();
+            skillAnimationManager.OnAnimationEnded -= SkillFinished;
+            skillAnimationManager.OnAnimationEnded -= endSkill;
         }
-        else 
-        {
-            Debug.Log("Enemy Attacked");
-        }*/
     }
 
     //for dealing damage once while collider is active
@@ -75,7 +64,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
             {
                 if (playerInteractions != null)
                 {
-                    playerInteractions.ShowEnemyHealth(collision.gameObject);
+                    PlayerInteractions.ShowEnemyHealth(collision.gameObject);
                 }
                 health.CurrentHealth -= skill.Damage;
             }
@@ -99,7 +88,11 @@ public class SkillAbillityExecutioner: MonoBehaviour
         //Makes a 2d collider based on skill shape
         make2DColliderForSkill();
 
+        thisSkillCollider2D = GetComponent<Collider2D>();
         skillAnimationManager.OnAnimationApex += () => TurnColliderOnOrOff(true);
+
+        skillAnimationManager.OnAnimationEnded += SkillFinished;
+        skillAnimationManager.OnAnimationEnded += endSkill;
 
         playAnimation();
 
@@ -108,18 +101,10 @@ public class SkillAbillityExecutioner: MonoBehaviour
     }
     private void make2DColliderForSkill() 
     {
-        switch (skill.AreaShape)
-        {
-            case shape.Cone:
-                thisSkillCollider2D = skill.CreateConeCollider(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                break;
-            case shape.Square:
-                thisSkillCollider2D = skill.CreateBoxColliderForSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation());
-                break;
-            case shape.Circle:
-                thisSkillCollider2D = skill.CreateCircleColliderForSkill(gameObject); break;
-        }
-        TurnColliderOnOrOff(false);
+
+        LayerMask thisLayer  =  unitController.gameObject.layer;
+        skill.InstantiateSkill(gameObject, unitController.AttackPossition(), unitController.AttackRotation(), unitController, enemyLayer, thisLayer);
+        //TurnColliderOnOrOff(false);
     }
     private void Update()
     {
