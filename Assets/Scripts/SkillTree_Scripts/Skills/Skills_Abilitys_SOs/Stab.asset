@@ -12,15 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939862cc19101734fab301dc87017d61, type: 3}
   m_Name: Stab
   m_EditorClassIdentifier: 
+  effect: 0
   size: 1
   range: 1
-  damage: 1
+  flatDamage: 1
+  precentDamage: 0
   areaShape: 0
   angle: 90
   segments: 10
-  skillIcon: {fileID: 999809369234337312, guid: 47005fcd2d9955c4981c53ed55fbc1a2, type: 3}
+  skillIcon: {fileID: 616922437432179931, guid: f8e11ab72a9d7f34d9885356fbf53bc9, type: 3}
   animation: {fileID: 7400000, guid: 57249eb9b581f1744af0d54d6266d472, type: 2}
   skillCooldown: 1
   knockbackForce: 5
   knockbackDuration: 0.3
   stunTime: 0.3
+  arrowPrefab: {fileID: 0}
+  projectileCount: 1
+  spreadAngle: 45

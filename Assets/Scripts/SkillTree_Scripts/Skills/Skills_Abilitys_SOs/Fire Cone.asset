@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939862cc19101734fab301dc87017d61, type: 3}
   m_Name: Fire Cone
   m_EditorClassIdentifier: 
+  effect: 0
   size: 1.8
   range: 0
-  damage: 2
+  flatDamage: 1
+  precentDamage: 0
   areaShape: 2
   angle: 80
   segments: 5
@@ -24,3 +26,6 @@ MonoBehaviour:
   knockbackForce: 4
   knockbackDuration: 0.5
   stunTime: 0.5
+  arrowPrefab: {fileID: 0}
+  projectileCount: 1
+  spreadAngle: 45

@@ -8,7 +8,8 @@ public class SkillAbilitySO : ScriptableObject
     [SerializeField] private skillEffect effect;
     [SerializeField] private float size = 3f;
     [SerializeField] private float range = 3f;
-    [SerializeField] private int damage;
+    [SerializeField] private int flatDamage;
+    [SerializeField] private float precentDamage = 1f;
     [SerializeField] private shape areaShape;
     [SerializeField] private float angle = 90f;
     [SerializeField] private int segments = 10;
@@ -24,7 +25,8 @@ public class SkillAbilitySO : ScriptableObject
 
     public float Size { get { return size; } }
     public float Range { get { return range; } }
-    public int Damage { get { return damage; } }
+    public int FlatDamage { get { return flatDamage; } }
+    public float PrecentDamage { get { return precentDamage; } }
     public shape AreaShape { get { return areaShape; } }
     public float Angle { get { return angle; } }
     public int Segments { get { return segments; } }

@@ -23,6 +23,8 @@ public class SkillSlot : MonoBehaviour
     public int MaxLevel { get { return skillSO.MaxLevel; } }
     public string SkillName { get { return skillSO.SkillName; } }
     public UnityEngine.UI.Button.ButtonClickedEvent ButtonOnClick { get { return skillButton.onClick; } }
+    public bool JustUnlockedNewSkill { get { return currLevel == 1 && skillSO.IsActiveSkill; } }
+
     private void OnValidate()
     {
         if (skillSO != null && skillLevelText != null && skillButton != null) 
@@ -45,7 +47,10 @@ public class SkillSlot : MonoBehaviour
             updateUI();
         }
     }
-
+    public void AddNewlyUnlockedSkill(EquipedSkillsPanel EquipedSkillsPanel) 
+    {
+        EquipedSkillsPanel.AddSkillSlot(skillSO.TypeOfSkill, skillSO.Skill);
+    }
     public bool CanUnlockSkill() 
     {
         foreach (SkillSlot slot in prerequisiteSkillSlots) 

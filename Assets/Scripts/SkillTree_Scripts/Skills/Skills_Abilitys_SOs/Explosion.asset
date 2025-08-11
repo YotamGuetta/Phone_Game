@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939862cc19101734fab301dc87017d61, type: 3}
   m_Name: Explosion
   m_EditorClassIdentifier: 
+  effect: 0
   size: 2
   range: 0
-  damage: 2
+  flatDamage: 1
+  precentDamage: 0
   areaShape: 1
   angle: 0
   segments: 10
@@ -24,3 +26,6 @@ MonoBehaviour:
   knockbackForce: 5
   knockbackDuration: 0.4
   stunTime: 0.3
+  arrowPrefab: {fileID: 0}
+  projectileCount: 1
+  spreadAngle: 45

@@ -15,7 +15,8 @@ MonoBehaviour:
   effect: 1
   size: 1
   range: 8
-  damage: 1
+  flatDamage: 1
+  precentDamage: 0
   areaShape: 0
   angle: 90
   segments: 10

@@ -8,6 +8,7 @@ public class SkillAbilityManager : MonoBehaviour
 
     public Action<skillType> SkillActivated;
     public Action SkillFinished;
+    public Action SkillUpdated;
 
     public static Action RunAftherInitialize;
 
@@ -24,6 +25,7 @@ public class SkillAbilityManager : MonoBehaviour
 
     private int numberOfSkills = 0;
 
+    public SkillsDictionary ActiveTypeToSkills { get { return typeToSkill; } }
     private void Start()
     {
         playerInteractions = GetComponentInParent<PlayerInteractions>();
@@ -41,7 +43,6 @@ public class SkillAbilityManager : MonoBehaviour
     private Dictionary<skillType, SkillAbillityExecutioner> InitializeDictionary()
     {
         Dictionary<skillType, SkillAbillityExecutioner> skillsDictionaryItems = new Dictionary<skillType, SkillAbillityExecutioner>();
-        bool skillfinishedAnimationAssighned = false;
         numberOfSkills = typeToSkill.skillsItems.Length;
 
         //Destroy exsisting skills
@@ -120,6 +121,16 @@ public class SkillAbilityManager : MonoBehaviour
         {
             Debug.Log("No Skill " + type.ToString() + " In Dictionary.");
         }
+    }
+    /// <summary>
+    /// Changes the equiped skill by the player
+    /// </summary>
+    /// <param name="type">The type of skill being changed</param>
+    /// <param name="newSkill">The new skill being added</param>
+    public void ChangeSkill(skillType type, SkillAbilitySO newSkill) 
+    {
+        skillsToTypeDictionary[type].ChangeSkill(newSkill);
+        SkillUpdated?.Invoke();
     }
     public float GetASkillCooldownByType(skillType type)
     {

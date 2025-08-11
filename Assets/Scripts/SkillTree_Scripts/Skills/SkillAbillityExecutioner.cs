@@ -16,7 +16,6 @@ public class SkillAbillityExecutioner: MonoBehaviour
     private List<GameObject> enemiesIncountered;
     private UnitController unitController;
     private Collider2D thisSkillCollider2D;
-    private bool skillISActive = false;
     public float SkillTimer { get { return skill.SkillCooldown; } }
     public void Initialize(SkillAbilitySO skillAbilitySO, UnitController unitController, LayerMask enemyLayer, PlayerInteractions playerInteractions)
     {
@@ -66,7 +65,7 @@ public class SkillAbillityExecutioner: MonoBehaviour
                 {
                     PlayerInteractions.ShowEnemyHealth(collision.gameObject);
                 }
-                health.CurrentHealth -= skill.Damage;
+                health.CurrentHealth -= skill.FlatDamage;
             }
             if (knockback != null)
             {

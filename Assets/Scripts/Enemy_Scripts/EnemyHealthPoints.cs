@@ -60,7 +60,6 @@ public class EnemyHealthPoints : HealthPointsTrackerAbs
     }
     protected override void uniteDied()
     {
-
         if (showHealthInSlider)
         {
             canvasGroup.alpha = 0;

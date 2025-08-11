@@ -16,11 +16,13 @@ public class SkillCooldownUIDisplay : MonoBehaviour
     {
         SkillAbilityManager.RunAftherInitialize += initializeSkillSlots;
         skillAbilityManager.SkillActivated += SkillUsed;
+        skillAbilityManager.SkillUpdated += initializeSkillSlots;
     }
     private void OnDisable()
     {
         SkillAbilityManager.RunAftherInitialize -= initializeSkillSlots;
         skillAbilityManager.SkillActivated -= SkillUsed;
+        skillAbilityManager.SkillUpdated += initializeSkillSlots;
     }
     private void initializeSkillSlots() 
     {

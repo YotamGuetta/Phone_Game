@@ -46,13 +46,12 @@ public class Arrow : MonoBehaviour
             }
 
             HealthPointsTrackerAbs enemyHealth = collision.gameObject.GetComponent<HealthPointsTrackerAbs>();
-            enemyHealth.CurrentHealth -= damage;
 
             if (enemyHealth is EnemyHealthPoints)
             {
                 PlayerInteractions.ShowEnemyHealth(collision.gameObject);
             }
-
+            enemyHealth.CurrentHealth -= damage;
             AttachToTarget(collision.gameObject.transform);
         }
         else if (!IgnoreObstacles &&(ObstacleLayer.value & (1 << collision.gameObject.layer)) > 0) 

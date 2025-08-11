@@ -11,6 +11,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private SkillTreeManager skillTreeManager;
     [SerializeField] private StatsPanelManager statsPanelManager;
+    [SerializeField] private EquipedSkillsPanel equipedSkillsPanel;
     private ShopKeeper shopKeeper;
 
 
@@ -200,7 +201,10 @@ public class PlayerInput : MonoBehaviour
         {
             togglePanel(inventoryManager, side);
         }
-
+        if (Input.GetButtonDown("OpenSkillsAssigner")) 
+        {
+            togglePanel(equipedSkillsPanel, side);
+        }
         //Right Panels
         side = panelSide.Right;
         if (Input.GetButtonDown("ToggleSkills")) 
